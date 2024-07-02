@@ -12,14 +12,21 @@ class CityFixtures extends Fixture
     {
         $faker = \Faker\Factory::create('en_US');
 
+        $cities = [];
+
         for ($i = 0; $i < 20; $i++) {
             $city = new City();
             $city->setName($faker->city);
             $city->setZipCode($faker->postcode);
             $manager->persist($city);
+            $cities[] = $city;
         }
 
         $manager->flush();
+
+        foreach ($cities as $i => $city) {
+            $this->addReference('city_' . $i, $city);
+        }
     }
 }
 
