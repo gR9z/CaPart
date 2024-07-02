@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User List{% endblock %}
+
+{% block body %}
+    <h1>City List</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>City</th>
+            <th>Zip Code</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for city in cities %}
+            <tr>
+                <td>{{ city.name }}</td>
+                <td>{{ city.zipCode }}</td>
+                <td>
+{#                    <a href="{{ path('city_update', {'id': city.id}) }}">Update</a>#}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
