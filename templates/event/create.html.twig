@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Create a new event! {% endblock %}
+
+{% block body %}
+    <h2>Create a new event</h2>
+
+    {{ form_start(form) }}
+    <div class="errors">
+        {{ form_errors(form) }}
+    </div>
+
+    <div class="form__container">
+        <div class="form__row">
+            <div class="form__col">
+                {{ form_row(form.name) }}
+            </div>
+            <div class="form__col">
+                {{ form_row(form.startDateTime) }}
+            </div>
+            <div class="form__col">
+                {{ form_row(form.registrationDeadline) }}
+            </div>
+            <div class="form__col">
+                {{ form_row(form.maxRegistrations) }}
+            </div>
+            <div class="form__col">
+                {{ form_row(form.duration) }}
+            </div>
+            <div class="form__col">
+                {{ form_row(form.eventDetails) }}
+            </div>
+        </div>
+
+        <div class="form__row">
+            <div class="form__col">
+                {#                Host city : {{ app.user.firstname }} #}
+            </div>
+            <div class="form__col">
+
+            </div>
+        </div>
+    </div>
+
+    {{ form_end(form) }}
+
+{% endblock %}
+
