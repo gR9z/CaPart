@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    {% for flash_error in app.flashes('update_profile_error') %}
+        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+    {% endfor %}
+
+    <h1>Update profil</h1>
+
+    {{ form_errors(form) }}
+
+    {{ form_start(form) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.plainPassword, {
+        label: 'New password'
+    }) }}
+    {{ form_row(form.agreeTerms) }}
+
+    <button type="submit" class="btn">Update</button>
+    <button type="reset" class="btn">Cancel</button>
+    {{ form_end(form) }}
+{% endblock %}
