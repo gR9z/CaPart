@@ -40,6 +40,9 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            $user->setActive(true);
+            $user->setRoles(['ROLE_USERgit a']);
+
             $entityManager->persist($user);
             $entityManager->flush();
 

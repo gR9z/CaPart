@@ -48,6 +48,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private bool $isVerified = false;
 
+    #[ORM\ManyToOne]
+    private ?City $city = null;
+
+    #[ORM\Column]
+    private ?bool $isActive = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -179,6 +185,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getCity(): ?City
+    {
+        return $this->city;
+    }
+
+    public function setCity(?City $city): static
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
+    public function setActive(bool $isActive): static
+    {
+        $this->isActive = $isActive;
 
         return $this;
     }
