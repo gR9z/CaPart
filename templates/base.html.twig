@@ -12,17 +12,9 @@
     {% block javascripts %}
         {{ encore_entry_script_tags('app') }}
     {% endblock %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<header>
-    <nav>
-        <ul>
-            <li><a href="{{ path('app_login') }}">Login</a></li>
-            <li><a href="{{ path('app_register') }}">Sign Up</a></li>
-            <li><a href="{{ path('user_list') }}">List</a></li>
-            <li><a href="{{ path('cities_list') }}">Cities</a></li>
-        </ul>
-    </nav>
-</header>
+{% include 'header/header.html.twig' %}
 <body>
 {% block body %}{% endblock %}
 </body>
