@@ -59,7 +59,7 @@ class EventType extends AbstractType
                 'class' => Location::class,
                 'label' => 'Host',
                 'choice_label' => 'name',
-                'choices' => $location ? [$location] : [],
+                'choices' => $location ? [$location] : $location,
                 'data' => $location,
                 'attr' => [
                     'readonly' => true,
