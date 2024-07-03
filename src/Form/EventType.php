@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\City;
 use App\Entity\Event;
+use App\Entity\Place;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -15,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EventType extends AbstractType
@@ -51,16 +53,62 @@ class EventType extends AbstractType
                 'attr' => ['class' => 'form-control']
             ])
             ->add('city', EntityType::class, [
+                'mapped' => false,
                 'class' => City::class,
                 'choice_label' => 'name',
                 'label' => 'City',
                 'placeholder' => '-- choice your city --',
                 'attr' => ['class' => 'form-control']
             ])
-            ->
-            add('submit', SubmitType::class, [
+            ->add('place', EntityType::class, [
+                'class' => Place::class,
+                'choice_label' => 'name',
+                'label' => 'Place',
+                'placeholder' => '-- select a place --',
+                'choices' => [],
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('submit', SubmitType::class, [
                 'label' => 'Submit'
             ]);
+
+        $builder->get('city')->addEventListener(
+            FormEvents::POST_SUBMIT,
+            function (FormEvent $event) {
+                $form = $event->getForm();
+                $this->addPlaceField($form->getParent(), $form->getData());
+            }
+        );
+
+        $builder->addEventListener(
+            FormEvents::PRE_SET_DATA,
+            function (FormEvent $event) {
+                $data = $event->getData();
+                /* @var $place Place */
+                $place = $data->getPlace();
+                $form = $event->getForm();
+                if ($place) {
+                    $city = $place->getCity();
+                    $this->addPlaceField($form, $city);
+                    $form->get('city')->setData($city);
+                } else {
+                    $this->addPlaceField($form, null);
+                }
+            }
+        );
+
+    }
+
+    private function addPlaceField(FormInterface $form, ?City $city): void
+    {
+        $form->add('place', EntityType::class, [
+            'class' => Place::class,
+            'placeholder' => $city ? '-- select a place --' : '-- choose a city first --',
+            'choices' => $city ? $city->getPlaces() : [],
+            'choice_label' => 'name',
+            'label' => 'Place',
+            'attr' => ['class' => 'form-control']
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
