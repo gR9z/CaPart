@@ -58,12 +58,13 @@ class LocationController extends AbstractController
             return $this->redirectToRoute('locations_list');
         }
 
-        return $this->render('locations/locationUpdate.html.twig', [
+        return $this->render('location/locationUpdate.html.twig', [
             'form' => $form->createView(),
             'location' => $location,
         ]);
     }
 
+    #[Route('/locations/delete/{id}', name: 'location_delete', methods: ['GET'])]
     public function deleteLocation(LocationRepository $locationRepository, EntityManagerInterface $entityManager, int $id): Response
     {
         $location = $locationRepository->find($id);
