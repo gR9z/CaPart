@@ -10,7 +10,7 @@ class UserCreateTest extends WebTestCase
     public function test_createUserBySignUp(): void
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', 'user/create');
+        $crawler = $client->request('GET', 'register');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $form = $crawler->selectButton('Register')->form([
