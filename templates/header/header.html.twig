@@ -1,16 +1,110 @@
-<header class="">
-    <div class="">
-        <div class="">
-            <div class="">
-                <img src="{{ asset('images/logo.svg') }}" alt="Logo ça part" class="">
+{#<header class="">#}
+{#    <div class="">#}
+{#        <div class="">#}
+{#            <div class="">#}
+{#                <img src="{{ asset('images/logo.svg') }}" alt="Logo ça part" class="">#}
+{#            </div>#}
+{#        </div>#}
+{#        <nav class="">#}
+{#            <ul class="">#}
+{#                <li><a href="{{ path('app_login') }}">Login</a></li>#}
+{#                <li><a href="{{ path('app_register') }}">Sign Up</a></li>#}
+{#                <li><a href="{{ path('user_list') }}">List</a></li>#}
+{#            </ul>#}
+{#        </nav>#}
+{#    </div>#}
+{#</header>#}
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+
+<!-- component -->
+<div class="2xl:container 2xl:mx-auto">
+    <!--- more free and premium Tailwind CSS components at https://tailwinduikit.com/ --->
+    <div class="bg-white rounded shadow-lg py-5 px-7">
+        <nav class="flex justify-between">
+            <div class="flex items-center space-x-3 lg:pr-16 pr-6">
+                <img class="w-80 h-full" src="/images/logo.svg" alt="logo image"><a href="{{ path('app_login') }}">Home</a>
+            </div>
+
+
+            <ul class="hidden md:flex items-center space-x-2 ">
+                <li onclick="selected()" class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-white bg-indigo-600  cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded"><a href="{{ path('app_login') }}">Login</a></li>
+                <li onclick="selected()" class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded"><a href="{{ path('app_register') }}">Sign Up</a></li></li>
+                <li onclick="selected()" class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded"><a href="{{ path('user_list') }}">List</a></li></li>
+
+            </ul>
+
+        </nav>
+        <!-- for smaller devcies -->
+
+        <div class="block md:hidden w-full mt-5 ">
+            <div onclick="selectNew()" class="cursor-pointer px-4 py-3 text-white bg-indigo-600 rounded flex justify-between items-center w-full">
+                <div class="flex space-x-2">
+                    <span id="s1" class="font-semibold text-sm leading-3 hidden">Selected: </span><p id="textClicked" class="font-normal text-sm leading-3 focus:outline-none hover:bg-gray-800 duration-100 cursor-pointer ">Collections</p>
+                </div>
+                <svg id="ArrowSVG" class=" transform" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 9L12 15L18 9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class=" relative">
+                <ul id="list" class=" hidden font-normal text-base leading-4 absolute top-2 w-full rounded shadow-md">
+                    <li onclick="selectedSmall()" class="px-4 py-3 text-gray-600 bg-gray-50 border border-gray-50 focus:outline-none focus:bg-gray-100 hover:bg-gray-100 duration-100 cursor-pointer text-xs leading-3 font-normal">Arts</li>
+                    <li onclick="selectedSmall()" class="px-4 py-3 text-gray-600 bg-gray-50 border border-gray-50 focus:outline-none focus:bg-gray-100 hover:bg-gray-100 duration-100 cursor-pointer text-xs leading-3 font-normal">Space</li>
+                    <li onclick="selectedSmall()" class="px-4 py-3 text-gray-600 bg-gray-50 border border-gray-50 focus:outline-none focus:bg-gray-100 hover:bg-gray-100 duration-100 cursor-pointer text-xs leading-3 font-normal">Game</li>
+                    <li onclick="selectedSmall()" class="px-4 py-3 text-gray-600 bg-gray-50 border border-gray-50 focus:outline-none focus:bg-gray-100 hover:bg-gray-100 duration-100 cursor-pointer text-xs leading-3 font-normal">Utility</li>
+                    <li onclick="selectedSmall()" class="px-4 py-3 text-gray-600 bg-gray-50 border border-gray-50 focus:outline-none focus:bg-gray-100 hover:bg-gray-100 duration-100 cursor-pointer text-xs leading-3 font-normal">Cards</li>
+                </ul>
             </div>
         </div>
-        <nav class="">
-            <ul class="">
-                <li><a href="{{ path('app_login') }}">Login</a></li>
-                <li><a href="{{ path('app_register') }}">Sign Up</a></li>
-                <li><a href="{{ path('user_list') }}">List</a></li>
-            </ul>
-        </nav>
     </div>
-</header>
+</div>
+<script>function selected() {
+        var targeted = event.target;
+        var clicked = targeted.parentElement;
+
+        var child = clicked.children;
+        console.log(child);
+
+        for (let i = 0; i < child.length; i++) {
+            if (child[i].classList.contains("text-white")) {
+                console.log(child[i]);
+                child[i].classList.remove("text-white", "bg-indigo-600");
+                child[i].classList.add(
+                    "text-gray-600",
+                    "bg-gray-50",
+                    "border",
+                    "border-white"
+                );
+            }
+        }
+
+        targeted.classList.remove(
+            "text-gray-600",
+            "bg-gray-50",
+            "border",
+            "border-white"
+        );
+        targeted.classList.add("text-white", "bg-indigo-600");
+    }
+
+    function selectNew() {
+        var newL = document.getElementById("list");
+        newL.classList.toggle("hidden");
+
+        document.getElementById("ArrowSVG").classList.toggle("rotate-180");
+    }
+
+    function selectedSmall() {
+        var text = event.target.innerText;
+        var newL = document.getElementById("list");
+        var newText = document.getElementById("textClicked");
+        newL.classList.add("hidden");
+        document.getElementById("ArrowSVG").classList.toggle("rotate-180");
+        newText.innerText = text;
+
+        document.getElementById("s1").classList.remove("hidden");
+    }
+</script>
