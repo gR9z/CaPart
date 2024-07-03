@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\City;
+use App\Entity\Location;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -57,10 +57,10 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('city', EntityType::class, [
-                'class' => City::class,
+            ->add('location', EntityType::class, [
+                'class' => Location::class,
                 'choice_label' => 'name',
-                'placeholder' => 'Choose a city',
+                'placeholder' => 'Choose a location',
                 'required' => false,
             ])
             ->add('agreeTerms', CheckboxType::class, [
