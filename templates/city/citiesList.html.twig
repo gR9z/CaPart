@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User List{% endblock %}
+{% block title %}City List{% endblock %}
 
 {% block body %}
     <h1>City List</h1>
@@ -19,7 +19,8 @@
                 <td>{{ city.name }}</td>
                 <td>{{ city.zipCode }}</td>
                 <td>
-{#                    <a href="{{ path('city_update', {'id': city.id}) }}">Update</a>#}
+                    <a href="{{ path('city_update', {'id': city.id}) }}">Update</a>
+                    <a href="{{ path('city_delete', {'id': city.id}) }}">Delete</a>
                 </td>
             </tr>
         {% endfor %}
