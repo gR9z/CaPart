@@ -33,7 +33,7 @@ class EventController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function create(
         EntityManagerInterface $entityManager,
-        Request $request
+        Request                $request
     ): Response
     {
         $user = $this->getUser();
@@ -42,8 +42,13 @@ class EventController extends AbstractController
             throw new \LogicException('The user is not an instance of the expected User class.');
         }
 
+        $location = $user->getLocation();
+
         $event = new Event();
-        $form = $this->createForm(EventType::class, $event);
+        $form = $this->createForm(EventType::class, $event,  [
+            'location' => $location,
+        ]);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -55,7 +60,9 @@ class EventController extends AbstractController
             }
 
             $event->setState($stateCreated);
-            $event->setLocation($user->getCity());
+            $event->setLocation($location);
+            $event->setOrganizer($user);
+
             $entityManager->persist($event);
             $entityManager->flush();
 
@@ -63,9 +70,7 @@ class EventController extends AbstractController
             return $this->redirectToRoute('events_list');
         }
 
-        return $this->render('event/create.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        return $this->render('event/create.html.twig', ['form' => $form->createView()]);
     }
 
     #[Route('/places', name: 'get_places_by_city', methods: ['GET'])]

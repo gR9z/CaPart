@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\City;
 use App\Entity\Event;
+use App\Entity\Location;
 use App\Entity\Place;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -23,6 +24,8 @@ class EventType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $location = $options['location'];
+
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Event Name',
@@ -51,6 +54,17 @@ class EventType extends AbstractType
             ->add('eventDetails', TextareaType::class, [
                 'label' => 'Event details',
                 'attr' => ['class' => 'form-control']
+            ])
+            ->add('location', EntityType::class, [
+                'class' => Location::class,
+                'label' => 'Host',
+                'choice_label' => 'name',
+                'choices' => $location ? [$location] : [],
+                'data' => $location,
+                'attr' => [
+                    'readonly' => true,
+                    'class' => 'bg-gray-200',
+                ],
             ])
             ->add('city', EntityType::class, [
                 'mapped' => false,
@@ -115,6 +129,7 @@ class EventType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Event::class,
+            'location' => null,
         ]);
     }
 }
