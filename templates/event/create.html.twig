@@ -2,6 +2,10 @@
 
 {% block title %} Create a new event! {% endblock %}
 
+ {% block javascripts %}
+     <script src="/js/event.js" defer></script>
+ {% endblock %}
+
 {% block body %}
     <h2>Create a new event</h2>
 
@@ -36,17 +40,28 @@
             <div class="form__col">
                 Host city : {{ app.user.city.name }}
             </div>
-            <div class="form__col">
 
+            <div class="form__col">
+                {{ form_row(form.city) }}
+            </div>
+
+            <div class="form__col" id="place-select-wrapper">
+                {{ form_row(form.place) }}
+            </div>
+
+            <div class="form__col" id="place-details" style="display: none;">
+                <p><strong>Street:</strong> <span id="place-street"></span></p>
+                <p><strong>Longitude:</strong> <span id="place-longitude"></span></p>
+                <p><strong>Latitude:</strong> <span id="place-latitude"></span></p>
             </div>
         </div>
+
+        <input type="hidden" name="_csrf_token"
+               value="{{ csrf_token('authenticate') }}"
+        >
     </div>
 
     {{ form_end(form) }}
-
-    {% block javascripts %}
-       <script src="/js/event.js" defer></script>
-    {% endblock %}
 
 {% endblock %}
 

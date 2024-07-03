@@ -16,7 +16,7 @@
             <th>Is Active</th>
             <th>Is Verified</th>
             <th>Roles</th>
-            <th>City</th>
+            <th>Location</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -33,7 +33,7 @@
                 <td>{{ user.isActive ? 'Yes' : 'No' }}</td>
                 <td>{{ user.isVerified ? 'Yes' : 'No' }}</td>
                 <td>{{ user.roles|join(', ') }}</td>
-                <td>{{ user.city ? user.city.name : 'None' }}</td>
+                <td>{{ user.location ? user.location.name : 'None' }}</td>
                 <td>
                     <a href="{{ path('user_update', {'id': user.id}) }}">Update</a>
                 </td>
