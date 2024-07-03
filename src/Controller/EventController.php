@@ -3,13 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\City;
-use App\Entity\Event;
 use App\Entity\Place;
-use App\Entity\State;
 use App\Entity\User;
-use App\Enum\StateLabel;
-use App\EventService;
-use App\Form\EventType;
+use App\Service\EventService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
