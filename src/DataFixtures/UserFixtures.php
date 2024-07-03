@@ -15,9 +15,9 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
         $roles = ["ROLE_USER", "ROLE_ADMIN"];
 
-        $cityReferences = [];
-        for($i = 0; $i < 20; $i++) {
-            $cityReferences[] = $this->getReference('city_'.$i);
+        $locationReferences = [];
+        for ($i = 0; $i < 5; $i++) {
+            $locationReferences[] = $this->getReference('campus_' . $i);
         }
 
         $adminUser = new User();
@@ -27,7 +27,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $adminUser->setPassword('$2y$13$aZLqx0rob5TAJIb2NMsgCOcy1V7Aq8KYfqExsD0FcfOvopAJOBQym');
         $adminUser->setEmail('admin@capart.fr');
         $adminUser->setPhoneNumber($faker->phoneNumber);
-        $adminUser->setCity($faker->randomElement($cityReferences));
+        $adminUser->setLocation($faker->randomElement($locationReferences));
         $adminUser->setRoles($roles);
         $adminUser->setActive(true);
         $adminUser->setVerified(true);
@@ -39,13 +39,13 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $simpleUser->setPassword('$2y$13$aZLqx0rob5TAJIb2NMsgCOcy1V7Aq8KYfqExsD0FcfOvopAJOBQym');
         $simpleUser->setEmail('user@capart.fr');
         $simpleUser->setPhoneNumber($faker->phoneNumber);
-        $simpleUser->setCity($faker->randomElement($cityReferences));
+        $simpleUser->setLocation($faker->randomElement($locationReferences));
         $simpleUser->setRoles([$roles[0]]);
         $simpleUser->setActive(true);
         $simpleUser->setVerified(true);
 
         $users = [];
-        for($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             $user = new User();
             $user->setUsername($faker->userName);
             $user->setFirstName($faker->firstName);
@@ -53,7 +53,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $user->setPassword('$2y$13$aZLqx0rob5TAJIb2NMsgCOcy1V7Aq8KYfqExsD0FcfOvopAJOBQym');
             $user->setEmail($faker->unique()->email);
             $user->setPhoneNumber($faker->phoneNumber);
-            $user->setCity($faker->randomElement($cityReferences));
+            $user->setLocation($faker->randomElement($locationReferences));
             $user->setRoles($faker->randomElements($roles));
             $user->setActive(true);
             $user->setVerified($faker->boolean(50));
@@ -78,7 +78,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies(): array
     {
         return [
-            CityFixtures::class,
+            LocationFixtures::class,
         ];
     }
 }
