@@ -45,7 +45,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $simpleUser->setVerified(true);
 
         $users = [];
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 300; $i++) {
             $user = new User();
             $user->setUsername($faker->userName);
             $user->setFirstName($faker->firstName);

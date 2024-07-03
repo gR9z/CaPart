@@ -50,6 +50,7 @@ class EventService
             $event->setState($stateCreated);
             $event->setLocation($location);
             $event->setOrganizer($user);
+            $event->addParticipant($user);
 
             $this->entityManager->persist($event);
             $this->entityManager->flush();

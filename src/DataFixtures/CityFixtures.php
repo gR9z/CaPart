@@ -14,9 +14,9 @@ class CityFixtures extends Fixture
 
         $cities = [];
 
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 40; $i++) {
             $city = new City();
-            $city->setName($faker->city);
+            $city->setName($faker->unique()->city);
             $city->setZipCode($faker->postcode);
             $manager->persist($city);
             $cities[] = $city;
