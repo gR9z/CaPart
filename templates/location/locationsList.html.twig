@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Location List{% endblock %}
+
+{% block body %}
+    <h1>Location List</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Location</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for location in locations %}
+            <tr>
+                <td>{{ location.name }}</td>
+                <td>
+                    <a href="{{ path('location_update', {'id': location.id}) }}">Update</a>
+                    <a href="{{ path('location_delete', {'id': location.id}) }}">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
