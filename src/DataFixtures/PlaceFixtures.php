@@ -14,13 +14,13 @@ class PlaceFixtures extends Fixture implements DependentFixtureInterface
         $faker = \Faker\Factory::create('en_US');
 
         $cityReferences = [];
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 40; $i++) {
             $cityReferences[] = $this->getReference('city_' . $i);
         }
 
         $places = [];
 
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 120; $i++) {
             $place = new Place();
             $place->setName($faker->company);
             $place->setStreet($faker->streetAddress);

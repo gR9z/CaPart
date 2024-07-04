@@ -3,12 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\City;
-use App\Entity\Event;
 use App\Entity\Place;
-use App\Entity\State;
 use App\Entity\User;
-use App\Enum\StateLabel;
-use App\Form\EventType;
+use App\Service\EventService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -32,40 +29,27 @@ class EventController extends AbstractController
     #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
     public function create(
-        EntityManagerInterface $entityManager,
-        Request $request
-    ): Response
-    {
+        Request $request,
+        EventService $eventService
+    ): Response {
         $user = $this->getUser();
 
         if (!$user instanceof User) {
             throw new \LogicException('The user is not an instance of the expected User class.');
         }
 
-        $event = new Event();
-        $form = $this->createForm(EventType::class, $event);
-        $form->handleRequest($request);
+        $result = $eventService->createEvent($user, $request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $stateCreated = $entityManager->getRepository(State::class)->findOneBy(['label' => StateLabel::Created]);
-
-            if ($stateCreated === null) {
-                $this->addFlash('error', 'The default state "created" was not found in the database.');
-                return $this->redirectToRoute('events_create');
-            }
-
-            $event->setState($stateCreated);
-            $event->setLocation($user->getCity());
-            $entityManager->persist($event);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Event created!');
+        if ($result['success']) {
+            $this->addFlash('success', $result['message']);
             return $this->redirectToRoute('events_list');
+        } else {
+            if (isset($result['message'])) {
+                $this->addFlash('error', $result['message']);
+            }
         }
 
-        return $this->render('event/create.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        return $this->render('event/create.html.twig', ['form' => $result['form']->createView()]);
     }
 
     #[Route('/places', name: 'get_places_by_city', methods: ['GET'])]
