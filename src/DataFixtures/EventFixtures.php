@@ -51,7 +51,7 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
             $startDateTime = (clone $registrationDeadline)->modify('+1 day');
             $event->setStartDateTime($startDateTime);
 
-            $numParticipants = $faker->numberBetween(4, 50);
+            $numParticipants = $faker->numberBetween(4, $event->getMaxRegistrations());
             $participants = $faker->randomElements($userReferences, $numParticipants);
 
             foreach ($participants as $participant) {

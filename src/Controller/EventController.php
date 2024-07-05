@@ -9,6 +9,7 @@ use App\Entity\User;
 use App\Form\EventType;
 use App\Repository\EventRepository;
 use App\Service\EventService;
+use App\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,10 +18,23 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/events', name: 'events_')]
 class EventController extends AbstractController
 {
+
+    private EventService $eventService;
+    private UserService $userService;
+    private SluggerInterface $slugger;
+
+    public function __construct(EventService $eventService,UserService $userService, SluggerInterface $slugger)
+    {
+        $this->slugger = $slugger;
+        $this->userService = $userService;
+        $this->eventService = $eventService;
+    }
+
     #[Route('/', name: 'list', methods: ['GET'])]
     #[IsGranted('ROLE_USER')]
     public function list(EventRepository $eventRepository): Response
@@ -32,14 +46,20 @@ class EventController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'details', requirements: ['id' => "\d+"], methods: ['GET'])]
+    #[Route('/view/{slug}', name: 'details', requirements: ['slug' => "[a-z0-9-]+"], methods: ['GET'])]
     #[IsGranted('ROLE_USER')]
-    public function show(EventRepository $eventRepository, int $id): Response
+    public function show(EventRepository $eventRepository, Request $request): Response
     {
-        $event = $eventRepository->find($id);
+        $id = $request->query->get('id');
+
+        if (!$id) {
+            throw $this->createNotFoundException('ID parameter is missing');
+        }
+
+        $event = $eventRepository->find($id);;
 
         if (!$event) {
-            throw $this->createNotFoundException('Event not found' . $event);
+            throw $this->createNotFoundException('Event not found: ' . $event);
         }
 
         if (!$this->isGranted('ROLE_ADMIN') && $event !== $this->getUser()) {
@@ -55,11 +75,7 @@ class EventController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function create(Request $request, EventService $eventService): Response
     {
-        $user = $this->getUser();
-
-        if (!$user instanceof User) {
-            throw new \LogicException('The user is not an instance of the expected User class.');
-        }
+        $user = $this->userService->getAuthenticatedUser();
 
         $event = new Event();
         $form = $this->createForm(EventType::class, $event, [
@@ -82,13 +98,13 @@ class EventController extends AbstractController
         return $this->render('event/create.html.twig', ['form' => $form->createView()]);
     }
 
-    #[Route('/{id}/update', name: 'update', methods: ['GET', 'POST'])]
+    #[Route('/update/{id}', name: 'update', methods: ['GET', 'POST'])]
     public function updateEvent(Request $request, Event $event, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
             $this->addFlash('success', 'Event updated');
@@ -106,11 +122,32 @@ class EventController extends AbstractController
     public function deleteEvent(EventRepository $eventRepository, EntityManagerInterface $entityManager, int $id): Response
     {
         $event = $eventRepository->find($id);
+
         $entityManager->remove($event);
         $entityManager->flush();
         return $this->redirectToRoute('events_list');
     }
 
+    #[Route('/events/register/{id}', name: 'register', requirements: ['id' => '\d+'], methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
+    public function register(int $id, EventRepository $eventRepository): Response
+    {
+        $event = $eventRepository->find($id);
+
+        if (!$event) {
+            throw $this->createNotFoundException('Event not found');
+        }
+
+        $result = $this->eventService->registerUserToEvent($event);
+
+        if ($result['success']) {
+            $this->addFlash('success', $result['message']);
+        } else {
+            $this->addFlash('error', $result['message']);
+        }
+
+        return $this->redirectToRoute('events_details', ['slug' => $this->slugger->slug(strtolower($event->getName())), 'id' => $event->getId()]);
+    }
     #[Route('/places', name: 'get_places_by_city', methods: ['GET'])]
     public function getPlacesByCity(Request $request, EntityManagerInterface $em): JsonResponse
     {

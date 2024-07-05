@@ -10,24 +10,43 @@
         <thead>
         <tr>
             <th>Name</th>
-            <th>Start date</th>
-            <th>Duration</th>
-            <th>Details</th>
-            <th>Actions</th>
+            <th>Event start</th>
+            <th>Deadline</th>
+            <th>Availability</th>
+            <th>State</th>
+            <th>Registered</th>
+            <th>Organizer</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
         {% for event in events %}
             <tr>
                 <td>
-                    <a href="{{ path('events_details', {'id': event.id}) }}">{{ event.name }}</a>
+                    <a href="{{ path('events_details', { slug: (event.name|slug)|lower }) }}?id={{ event.id }}">{{ event.name }}</a>
                 </td>
-                <td>{{ event.startDateTime|date('Y-m-d H-i') }}</td>
-                <td>{{ event.duration }}</td>
-                <td>{{ event.eventDetails }}</td>
+                <td>{{ event.startDateTime|date('Y-m-d H:i') }}</td>
+                <td>{{ event.registrationDeadline|date('Y-m-d') }}</td>
+                <td>{{ event.participants.count }} / {{ event.maxRegistrations }}</td>
+                <td>{{ event.state.label }}</td>
+                <td>{{ event.isUserRegistered(app.user) ? 'Yes' : 'No' }}</td>
+                <td>{{ event.organizer.firstName }} {{ event.organizer.lastName }}</td>
                 <td>
-                    <a href="{{ path('events_update', {'id': event.id}) }}">Update</a>
-                    <a href="{{ path('events_delete', {'id': event.id}) }}">Delete</a>
+                    {% if app.user == event.organizer %}
+                        {% if event.state.label != 'created' %}
+                            <a href="{{ path('events_update', {'id': event.id}) }}">Update</a>
+                            <a href="{{ path('events_cancel', {'id': event.id}) }}">Cancel</a>
+                        {% else %}
+                            <a href="{{ path('events_update', {'id': event.id}) }}">Update</a>
+                            <a href="{{ path('events_update', {'id': event.id}) }}">Publish</a>
+                        {% endif %}
+                    {% else %}
+                        {% if not event.isUserRegistered(app.user) and event.registrationDeadline > "now"|date('Y-m-d H:i') %}
+                            <a href="{{ path('events_register', {'id': event.id}) }}">Register</a>
+                        {% elseif event.isUserRegistered(app.user) %}
+                            <a href="{{ path('events_update', {'id': event.id}) }}">Unregister</a>
+                        {% endif %}
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
