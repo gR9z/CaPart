@@ -1,69 +1,59 @@
-{# <header class=""> #}
-{#    <div class=""> #}
-{#        <div class=""> #}
-{#            <div class=""> #}
-{#                <img src="{{ asset('images/logo.svg') }}" alt="Logo ça part" class=""> #}
-{#            </div> #}
-{#        </div> #}
-{#        <nav class=""> #}
-{#            <ul class=""> #}
-{#                <li><a href="{{ path('app_login') }}">Login</a></li> #}
-{#                <li><a href="{{ path('app_register') }}">Sign Up</a></li> #}
-{#                <li><a href="{{ path('user_list') }}">List</a></li> #}
-{#            </ul> #}
-{#        </nav> #}
-{#    </div> #}
-{# </header> #}
-
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-
-
-<!-- component -->
-<div class="2xl:container 2xl:mx-auto">
-    <!--- more free and premium Tailwind CSS components at https://tailwinduikit.com/ --->
+<header>
     <div class="bg-white rounded shadow-lg py-5 px-7">
-        <nav class="flex justify-between">
+        <nav class="flex justify-between max-w-7xl mx-auto">
             <div class="flex items-center space-x-3 lg:pr-16 pr-6">
-                <a href="{{ path('app_login') }}"> <img class="w-80 h-full" src="/images/logo.svg" alt="logo image"></a>
+                <a href="{{ path('app_login') }}">
+                    <img class="w-80 h-full pr-6 mx-9" src="/images/logo.svg" alt="logo image">
+                </a>
             </div>
 
-
             <ul class="hidden md:flex items-center space-x-2 ">
-                <li onclick="selected()"
-                    class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-white bg-indigo-600  cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
-                    <a href="{{ path('app_login') }}">Login</a></li>
-                <li onclick="selected()"
-                    class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
-                    <a href="{{ path('app_register') }}">Sign Up</a></li>
-                </li>
-                <li onclick="selected()"
-                    class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
-                    <a href="{{ path('user_list') }}">List</a></li>
-                </li>
-                <li onclick="selected()"
-                    class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
-                    <a href="{{ path('cities_list') }}">Cities</a></li>
-                </li>
-                <li onclick="selected()"
-                    class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
-                    <a href="{{ path('locations_list') }}">Locations</a></li>
-                </li>
-
+                {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <li onclick="selected()"
+                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-white bg-indigo-600  cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
+                        <a href="{{ path('app_login') }}">Login</a></li>
+                    <li onclick="selected()"
+                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
+                        <a href="{{ path('app_register') }}">Sign Up</a></li>
+                    </li>
+                {% endif %}
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <li onclick="selected()"
+                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
+                        <a href="{{ path('events_list') }}">Events</a></li>
+                    </li>
+                    {#                   TODO -> ne trouve pas l'utilisateur #}
+                    {#                    <li onclick="selected()"#}
+                    {#                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">#}
+                    {#                        <a href="{{ path('user_personal_profil') }}">My profil</a></li>#}
+                    {#                    </li>#}
+                {% endif %}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li onclick="selected()"
+                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
+                        <a href="{{ path('user_list') }}">List</a></li>
+                    </li>
+                    <li onclick="selected()"
+                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
+                        <a href="{{ path('cities_list') }}">Cities</a></li>
+                    </li>
+                    <li onclick="selected()"
+                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
+                        <a href="{{ path('locations_list') }}">Locations</a></li>
+                    </li>
+                {% endif %}
             </ul>
-
         </nav>
-        <!-- for smaller devcies -->
 
+        <!-- for smaller DEVICES -->
         <div class="block md:hidden w-full mt-5 ">
             <div onclick="selectNew()"
                  class="cursor-pointer px-4 py-3 text-white bg-indigo-600 rounded flex justify-between items-center w-full">
                 <div class="flex space-x-2">
-                    <span id="s1" class="font-semibold text-sm leading-3 hidden">Selected: </span>
+                    <span id="s1" class="font-semibold text-sm leading-3 hidden"></span>
                     <p id="textClicked"
                        class="font-normal text-sm leading-3 focus:outline-none hover:bg-gray-800 duration-100 cursor-pointer ">
-                        Collections</p>
+                        Menu</p>
                 </div>
                 <svg id="ArrowSVG" class=" transform" width="24" height="24" viewBox="0 0 24 24" fill="none"
                      xmlns="http://www.w3.org/2000/svg">
@@ -75,39 +65,31 @@
                 <ul id="list" class=" hidden font-normal text-base leading-4 absolute top-2 w-full rounded shadow-md">
                     <li onclick="selectedSmall()"
                         class="px-4 py-3 text-gray-600 bg-gray-50 border border-gray-50 focus:outline-none focus:bg-gray-100 hover:bg-gray-100 duration-100 cursor-pointer text-xs leading-3 font-normal">
-                        Arts
+                        <a href="{{ path('app_login') }}">Login</a>
                     </li>
                     <li onclick="selectedSmall()"
                         class="px-4 py-3 text-gray-600 bg-gray-50 border border-gray-50 focus:outline-none focus:bg-gray-100 hover:bg-gray-100 duration-100 cursor-pointer text-xs leading-3 font-normal">
-                        Space
+                        <a href="{{ path('app_register') }}">Sign Up</a>
                     </li>
                     <li onclick="selectedSmall()"
                         class="px-4 py-3 text-gray-600 bg-gray-50 border border-gray-50 focus:outline-none focus:bg-gray-100 hover:bg-gray-100 duration-100 cursor-pointer text-xs leading-3 font-normal">
-                        Game
-                    </li>
-                    <li onclick="selectedSmall()"
-                        class="px-4 py-3 text-gray-600 bg-gray-50 border border-gray-50 focus:outline-none focus:bg-gray-100 hover:bg-gray-100 duration-100 cursor-pointer text-xs leading-3 font-normal">
-                        Utility
-                    </li>
-                    <li onclick="selectedSmall()"
-                        class="px-4 py-3 text-gray-600 bg-gray-50 border border-gray-50 focus:outline-none focus:bg-gray-100 hover:bg-gray-100 duration-100 cursor-pointer text-xs leading-3 font-normal">
-                        Cards
+                        <a href="{{ path('user_list') }}">List
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
     </div>
-</div>
+</header>
+
 <script>function selected() {
         var targeted = event.target;
         var clicked = targeted.parentElement;
 
         var child = clicked.children;
-        console.log(child);
 
         for (let i = 0; i < child.length; i++) {
             if (child[i].classList.contains("text-white")) {
-                console.log(child[i]);
                 child[i].classList.remove("text-white", "bg-indigo-600");
                 child[i].classList.add(
                     "text-gray-600",

@@ -7,6 +7,7 @@ use App\Entity\Event;
 use App\Entity\Place;
 use App\Entity\User;
 use App\Form\EventType;
+use App\Repository\EventRepository;
 use App\Service\EventService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,16 +15,39 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/events', name: 'events_')]
 class EventController extends AbstractController
 {
     #[Route('/', name: 'list', methods: ['GET'])]
-    public function index(): Response
+    #[IsGranted('ROLE_USER')]
+    public function list(EventRepository $eventRepository): Response
     {
-        return $this->render('event/index.html.twig', [
-            'controller_name' => 'EventController',
+        $events = $eventRepository->findAll();
+
+        return $this->render('event/eventsList.html.twig', [
+            'events' => $events,
+        ]);
+    }
+
+    #[Route('/{id}', name: 'details', requirements: ['id' => "\d+"], methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
+    public function show(EventRepository $eventRepository, int $id): Response
+    {
+        $event = $eventRepository->find($id);
+
+        if (!$event) {
+            throw $this->createNotFoundException('Event not found' . $event);
+        }
+
+        if (!$this->isGranted('ROLE_ADMIN') && $event !== $this->getUser()) {
+            throw new AccessDeniedException('Access denied.');
+        }
+
+        return $this->render('event/eventDetails.html.twig', [
+            'event' => $event,
         ]);
     }
 
@@ -55,7 +79,36 @@ class EventController extends AbstractController
             }
         }
 
-        return $this->render('event/create.html.twig', ['form' => $form->createView()]);
+        return $this->render('event/eventCreate.html.twig', ['form' => $result['form']->createView()]);
+    }
+
+    #[Route('/{id}/update', name: 'update', methods: ['GET', 'POST'])]
+    public function updateEvent(Request $request, Event $event, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(EventType::class, $event);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Event updated');
+
+            return $this->redirectToRoute('events_list');
+        }
+
+        return $this->render('event/eventUpdate.html.twig', [
+            'form' => $form->createView(),
+            'event' => $event,
+        ]);
+    }
+
+    #[Route('/delete/{id}', name: 'delete', methods: ['GET'])]
+    public function deleteEvent(EventRepository $eventRepository, EntityManagerInterface $entityManager, int $id): Response
+    {
+        $event = $eventRepository->find($id);
+        $entityManager->remove($event);
+        $entityManager->flush();
+        return $this->redirectToRoute('events_list');
     }
 
     #[Route('/places', name: 'get_places_by_city', methods: ['GET'])]

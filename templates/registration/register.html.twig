@@ -1,17 +1,80 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Create an account!{% endblock %}
 
 {% block body %}
-    {% for flash_error in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-    {% endfor %}
+    <div class="">
+        <h1 class="text-4xl text-center pt-6   ">Register</h1>
+        <div class="flex items-center justify-center p-12">
+            <!-- Author: FormBold Team -->
+            <div class="mx-auto w-full max-w-[550px] bg-white">
+                <form method="post">
+                    <div class="mb-5">
+                        <label for="username" class="mb-3 block text-base font-medium text-[#07074D]">
+                            Username
+                        </label>
+                        <input type="text" name="username" id="username" placeholder="Username"
+                               class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"/>
+                    </div>
 
-    <h1>Register</h1>
+                    <div class="mb-5">
+                        <label for="firstName" class="mb-3 block text-base font-medium text-[#07074D]">
+                            firstName
+                        </label>
+                        <input type="text" name="name" id="name" placeholder="firstName"
+                               class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"/>
+                    </div>
 
-    {{ form_errors(registrationForm) }}
 
-    {{ form_start(registrationForm) }}
+                    <div class="mb-5">
+                        <label for="Lastname" class="mb-3 block text-base font-medium text-[#07074D]">
+                            Surname
+                        </label>
+                        <input type="text" Lastname="Surname" id="Lastname" placeholder="Lastname"
+                               class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"/>
+                    </div>
 
-    {{ form_end(registrationForm) }}
+
+                    <div class="mb-5">
+                        <label for="phoneNumber" class="mb-3 block text-base font-medium text-[#07074D]">
+                            Phone Number
+                        </label>
+                        <input type="text" name="phoneNumber" id="phone" placeholder="Enter your phone number"
+                               class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"/>
+                    </div>
+                    <div class="mb-5">
+                        <label for="email" class="mb-3 block text-base font-medium text-[#07074D]">
+                            Email Address
+                        </label>
+                        <input type="email" name="email" id="email" placeholder="Enter your email"
+                               class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"/>
+                    </div>
+
+                    <div class="mb-5">
+                        <label for="Verify-email" class="mb-3 block text-base font-medium text-[#07074D]">
+                            <div class="mb-5">
+                                <label for="email" class="mb-3 block text-base font-medium text-[#07074D]">
+                                    Verify-Email
+                                </label>
+                                <input type="plainPassword" name="plainPassword" id="plainPassword" placeholder="Verify-Email"
+                                       class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"/>
+                            </div>
+
+
+                            <div>
+                                <button
+                                        type="submit"
+                                        class="hover:shadow-form w-full rounded-md bg-[#fd00c5] py-3 px-8 text-center text-base font-semibold text-white outline-none uppercase">
+                                    ça démarre !
+                                </button>
+                            </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
 {% endblock %}
+
+
+

@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Update event{% endblock %}
+
+{% block javascripts %}
+    <script src="/js/event.js" defer></script>
+{% endblock %}
+
+{% block body %}
+    <h1>Update event</h1>
+
+    {{ form_errors(form) }}
+
+    {{ form_start(form) }}
+
+    {{ form_end(form) }}
+
+{#    TODO rafraichir la liste des places quand on change de ville#}
+
+    <a href="{{ path('events_list') }}">Back to the list of events</a>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Events list{% endblock %}
+
+{% block body %}
+    <h1>Events list</h1>
+
+    <a href="{{ path('events_create') }}">Create an event</a>
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Start date</th>
+            <th>Duration</th>
+            <th>Details</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for event in events %}
+            <tr>
+                <td>
+                    <a href="{{ path('events_details', {'id': event.id}) }}">{{ event.name }}</a>
+                </td>
+                <td>{{ event.startDateTime|date('Y-m-d H-i') }}</td>
+                <td>{{ event.duration }}</td>
+                <td>{{ event.eventDetails }}</td>
+                <td>
+                    <a href="{{ path('events_update', {'id': event.id}) }}">Update</a>
+                    <a href="{{ path('events_delete', {'id': event.id}) }}">Delete</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td>No events found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

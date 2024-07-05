@@ -3,42 +3,168 @@
 {% block title %}User List{% endblock %}
 
 {% block body %}
-    <h1>User List</h1>
+    <h1 class="justify-center " >User List</h1>
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Username</th>
-            <th>Email</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Phone Number</th>
-            <th>Is Active</th>
-            <th>Is Verified</th>
-            <th>Roles</th>
-            <th>Location</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for user in users %}
-            <tr>
-                <td>
-                    <a href="{{ path('user_details', {'id': user.id}) }}">{{ user.username }}</a>
-                </td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.firstName }}</td>
-                <td>{{ user.lastName }}</td>
-                <td>{{ user.phoneNumber }}</td>
-                <td>{{ user.isActive ? 'Yes' : 'No' }}</td>
-                <td>{{ user.isVerified ? 'Yes' : 'No' }}</td>
-                <td>{{ user.roles|join(', ') }}</td>
-                <td>{{ user.location ? user.location.name : 'None' }}</td>
-                <td>
-                    <a href="{{ path('user_update', {'id': user.id}) }}">Update</a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <section class="container px-4 mx-auto">
+        <div class="flex flex-col">
+            <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                    <div class="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                            <thead class="bg-gray-50 dark:bg-gray-800">
+                            <tr>
+                                <th scope="col"
+                                    class="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                    <div class="flex items-center gap-x-3">
+
+
+
+                                            <svg class="h-3" viewBox="0 0 10 11" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M2.13347 0.0999756H2.98516L5.01902 4.79058H3.86226L3.45549 3.79907H1.63772L1.24366 4.79058H0.0996094L2.13347 0.0999756ZM2.54025 1.46012L1.96822 2.92196H3.11227L2.54025 1.46012Z"
+                                                      fill="currentColor" stroke="currentColor" stroke-width="0.1"/>
+                                                <path d="M0.722656 9.60832L3.09974 6.78633H0.811638V5.87109H4.35819V6.78633L2.01925 9.60832H4.43446V10.5617H0.722656V9.60832Z"
+                                                      fill="currentColor" stroke="currentColor" stroke-width="0.1"/>
+                                                <path d="M8.45558 7.25664V7.40664H8.60558H9.66065C9.72481 7.40664 9.74667 7.42274 9.75141 7.42691C9.75148 7.42808 9.75146 7.42993 9.75116 7.43262C9.75001 7.44265 9.74458 7.46304 9.72525 7.49314C9.72522 7.4932 9.72518 7.49326 9.72514 7.49332L7.86959 10.3529L7.86924 10.3534C7.83227 10.4109 7.79863 10.418 7.78568 10.418C7.77272 10.418 7.73908 10.4109 7.70211 10.3534L7.70177 10.3529L5.84621 7.49332C5.84617 7.49325 5.84612 7.49318 5.84608 7.49311C5.82677 7.46302 5.82135 7.44264 5.8202 7.43262C5.81989 7.42993 5.81987 7.42808 5.81994 7.42691C5.82469 7.42274 5.84655 7.40664 5.91071 7.40664H6.96578H7.11578V7.25664V0.633865C7.11578 0.42434 7.29014 0.249976 7.49967 0.249976H8.07169C8.28121 0.249976 8.45558 0.42434 8.45558 0.633865V7.25664Z"
+                                                      fill="currentColor" stroke="currentColor" stroke-width="0.3"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </th>
+
+                                <th scope="col"
+                                    class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-[#fd00c5] dark:text-gray-400">
+                                    Email
+                                </th>
+
+                                <th scope="col"
+                                    class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-[#fd00c5] dark:text-gray-400">
+                                    Firstname
+                                </th>
+
+                                <th scope="col"
+                                    class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-[#fd00c5] dark:text-gray-400">
+                                    Lastname
+                                </th>
+
+                                <th scope="col"
+                                    class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-[#fd00c5] dark:text-gray-400">
+                                    Phone Number
+                                </th>
+
+                                <th scope="col"
+                                    class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-[#fd00c5] dark:text-gray-400">
+                                    Status
+                                </th>
+
+                                <th scope="col"
+                                    class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-[#fd00c5] dark:text-gray-400">
+                                    Account
+                                </th>
+
+                                <th scope="col"
+                                    class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-[#fd00c5] dark:text-gray-400">
+                                    Roles
+                                </th>
+
+                                <th scope="col"
+                                    class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-[#fd00c5] dark:text-gray-400">
+                                    Location
+                                </th>
+
+                                <th scope="col" class="relative py-3.5 px-4">
+                                    <span class="sr-only">Actions</span>
+                                </th>
+                            </tr>
+                            </thead>
+
+                            <tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+
+                            {% for user in users %}
+                                <tr>
+                                    <td class="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                                        <div class="inline-flex items-center gap-x-3">
+
+
+                                            <span>{{ user.username }}</span>
+                                        </div>
+                                    </td>
+
+                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">{{ user.email }}</td>
+                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">{{ user.firstname }}</td>
+                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">{{ user.lastname }}</td>
+                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">{{ user.phoneNumber }}</td>
+
+                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                                        {% if user.isActive %}
+                                            <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                                                <span aria-hidden
+                                                      class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
+                                                <span class="relative text-xs">
+                                                    active
+                                                </span>
+                                            </span>
+                                        {% else %}
+                                            <span class="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
+                                                <span aria-hidden
+                                                      class="absolute inset-0 bg-red-200 opacity-50 rounded-full"></span>
+                                                <span class="relative text-xs">
+                                                    inactive
+                                                </span>
+                                            </span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                                        {% if user.isVerified %}
+                                            <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                                                <span aria-hidden
+                                                      class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
+                                                <span class="relative text-xs">
+                                                    verified
+                                                </span>
+                                            </span>
+                                        {% else %}
+                                            <span class="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
+                                                <span aria-hidden
+                                                      class="absolute inset-0 bg-red-200 opacity-50 rounded-full"></span>
+                                                <span class="relative text-xs">
+                                                    unverified
+                                                </span>
+                                            </span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
+                                        {% for role in user.roles %}
+                                            {% set role_name = role|replace({'_': ' '})|title|lower|split(' ')|last %}
+                                            {% if not loop.last %}
+                                                {{ role_name }},
+                                            {% else %}
+                                                {{ role_name }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+
+                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">{{ user.location.name }}</td>
+
+                                    <td class="px-4 py-4 text-sm whitespace-nowrap">
+                                        <div class="flex items-center gap-x-6">
+                                            <a href="{{ path('user_update', {'id': user.id}) }}">
+                                                <button class="px-5 py-2 border-[#fd00c5] border text-[#fd00c5] rounded transition duration-300 hover:text-[#fd00c5] focus:outline-none">
+                                                    View Details
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}
