@@ -79,7 +79,7 @@ class EventController extends AbstractController
             }
         }
 
-        return $this->render('event/create.html.twig', ['form' => $result['form']->createView()]);
+        return $this->render('event/create.html.twig', ['form' => $form->createView()]);
     }
 
     #[Route('/{id}/update', name: 'update', methods: ['GET', 'POST'])]
