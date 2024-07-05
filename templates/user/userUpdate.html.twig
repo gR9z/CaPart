@@ -3,11 +3,14 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
+
+    <h1 class="justify-center ">Update profil</h1>
+
+
     {% for flash_error in app.flashes('update_profile_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+        <div class="alert alert-danger " role="alert">{{ flash_error }}</div>
     {% endfor %}
 
-    <h1>Update profil</h1>
 
     {{ form_errors(form) }}
 
@@ -17,8 +20,8 @@
         label: 'New password'
     }) }}
     {{ form_row(form.agreeTerms) }}
-
-    <button type="submit" class="btn">Update</button>
-    <button type="reset" class="btn">Cancel</button>
-    {{ form_end(form) }}
+    <div class ="space-x-4 grid justify-items-center">
+        <button type="submit" class="btn focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-white bg-[#fd00c5]  cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">Update</button>
+        <button type="reset" class="btn focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-white bg-[#fd00c5]  cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">Cancel</button>
+    </div>    {{ form_end(form) }}
 {% endblock %}

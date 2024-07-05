@@ -10,10 +10,10 @@
             <ul class="hidden md:flex items-center space-x-2 ">
                 {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
                     <li onclick="selected()"
-                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-white bg-indigo-600  cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
+                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-white bg-[#fd00c5]  cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
                         <a href="{{ path('app_login') }}">Login</a></li>
                     <li onclick="selected()"
-                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
+                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border bg-[#fd00c5] border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
                         <a href="{{ path('app_register') }}">Sign Up</a></li>
                     </li>
                 {% endif %}
@@ -22,11 +22,6 @@
                         class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
                         <a href="{{ path('events_list') }}">Events</a></li>
                     </li>
-                    {#                   TODO -> ne trouve pas l'utilisateur #}
-                    {#                    <li onclick="selected()"#}
-                    {#                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">#}
-                    {#                        <a href="{{ path('user_personal_profil') }}">My profil</a></li>#}
-                    {#                    </li>#}
                 {% endif %}
                 {% if is_granted('ROLE_ADMIN') %}
                     <li onclick="selected()"
@@ -48,7 +43,7 @@
         <!-- for smaller DEVICES -->
         <div class="block md:hidden w-full mt-5 ">
             <div onclick="selectNew()"
-                 class="cursor-pointer px-4 py-3 text-white bg-indigo-600 rounded flex justify-between items-center w-full">
+                 class="cursor-pointer px-4 py-3 text-white bg-[#fd00c5] rounded flex justify-between items-center w-full">
                 <div class="flex space-x-2">
                     <span id="s1" class="font-semibold text-sm leading-3 hidden"></span>
                     <p id="textClicked"

@@ -3,27 +3,35 @@
 {% block title %}City List{% endblock %}
 
 {% block body %}
-    <h1>City List</h1>
+    <h1 class="whitespace-nowrap px-6 py-4 text-8xl">City List</h1>
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th>City</th>
-            <th>Zip Code</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for city in cities %}
-            <tr>
-                <td>{{ city.name }}</td>
-                <td>{{ city.zipCode }}</td>
-                <td>
-                    <a href="{{ path('city_update', {'id': city.id}) }}">Update</a>
-                    <a href="{{ path('city_delete', {'id': city.id}) }}">Delete</a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+
+
+
+                    <table class=" text-start text-sm font-light text-surface dark:text-white">
+                        <thead class="border-b border-neutral-200 font-medium dark:border-white/10">
+                        <tr>
+                            <th scope="col" class="px-6 py-4">City</th>
+                            <th scope="col" class="px-6 py-4">Zip Code</th>
+                            <th scope="col" class="px-6 py-4">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for city in cities %}
+                            <tr class="border-b border-neutral-200 dark:border-white/10">
+                                <td class="whitespace-nowrap px-6 py-4 font-medium">{{ city.name }}</td>
+                                <td class="whitespace-nowrap px-6 py-4 font-medium">{{ city.zipCode }}</td>
+                                <td class="whitespace-nowrap px-6 py-4 font-medium">
+                                    <a href="{{ path('city_update', {'id': city.id}) }}" class="mr-2 cursor-pointer px-4 py-3 text-white bg-[#fd00c5] rounded items-center ">Update</a>
+                                    <a href="{{ path('city_delete', {'id': city.id}) }}"class="mr-2 cursor-pointer px-4 py-3 text-white bg-[#fd00c5] rounded  items-center ">Delete</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
