@@ -22,10 +22,10 @@ class PlaceFixtures extends Fixture implements DependentFixtureInterface
 
         for ($i = 0; $i < 120; $i++) {
             $place = new Place();
-            $place->setName($faker->company);
-            $place->setStreet($faker->streetAddress);
-            $place->setLongitude($faker->longitude);
-            $place->setLatitude($faker->latitude);
+            $place->setName($faker->company());
+            $place->setStreet($faker->streetAddress());
+            $place->setLongitude($faker->longitude());
+            $place->setLatitude($faker->latitude());
             $place->setCity($faker->randomElement($cityReferences));
 
             $manager->persist($place);
