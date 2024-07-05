@@ -27,7 +27,7 @@ class EventController extends AbstractController
     {
         $events = $eventRepository->findAll();
 
-        return $this->render('event/eventsList.html.twig', [
+        return $this->render('event/list.html.twig', [
             'events' => $events,
         ]);
     }
@@ -46,7 +46,7 @@ class EventController extends AbstractController
             throw new AccessDeniedException('Access denied.');
         }
 
-        return $this->render('event/eventDetails.html.twig', [
+        return $this->render('event/details.html.twig', [
             'event' => $event,
         ]);
     }
@@ -79,7 +79,7 @@ class EventController extends AbstractController
             }
         }
 
-        return $this->render('event/eventCreate.html.twig', ['form' => $result['form']->createView()]);
+        return $this->render('event/create.html.twig', ['form' => $result['form']->createView()]);
     }
 
     #[Route('/{id}/update', name: 'update', methods: ['GET', 'POST'])]
@@ -96,7 +96,7 @@ class EventController extends AbstractController
             return $this->redirectToRoute('events_list');
         }
 
-        return $this->render('event/eventUpdate.html.twig', [
+        return $this->render('event/update.html.twig', [
             'form' => $form->createView(),
             'event' => $event,
         ]);
