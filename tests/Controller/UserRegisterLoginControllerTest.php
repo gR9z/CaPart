@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Tests;
+namespace App\Tests\Controller;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\EventListener\MessageLoggerListener;
-use Symfony\Component\Mime\Email;
 
-class UserTest extends WebTestCase
+class UserRegisterLoginControllerTest extends WebTestCase
 {
 
     public function testRegister()
@@ -80,56 +79,56 @@ class UserTest extends WebTestCase
         $this->assertSelectorNotExists('.alert-danger'); // Check if no login error message is present
     }
 
-    // Redirection ne marche pas en test TODO
-//    public function testUpdateUser()
-//    {
-//        $client = static::createClient();
-//        $container = $client->getContainer();
-//        $entityManager = $container->get('doctrine')->getManager();
-//        $userRepository = $entityManager->getRepository(User::class);
-//
-//        $user = new User();
-//        $user->setUsername('testuser_' . uniqid());
-//        $user->setFirstName('Test');
-//        $user->setLastName('User');
-//        $user->setPhoneNumber('123456789');
-//        $user->setEmail('testuser_' . uniqid() . '@example.com');
-//        $user->setPassword(password_hash('testpassword', PASSWORD_BCRYPT));
-//        $user->setActive(true);
-//        $user->setRoles(['ROLE_USER']);
-//        $entityManager->persist($user);
-//        $entityManager->flush();
-//
-//        $crawler = $client->request('GET', '/user/' . $user->getId() . '/update');
-//
-//        $this->assertResponseIsSuccessful();
-//
-//        $form = $crawler->selectButton('Update')->form([
-//            'registration_form[username]' => 'updateduser',
-//            'registration_form[firstName]' => 'Updated',
-//            'registration_form[lastName]' => 'User',
-//            'registration_form[phoneNumber]' => '987654321',
-//            'registration_form[email]' => 'updateduser@example.com',
-//            'registration_form[plainPassword][first]' => 'newpassword',
-//            'registration_form[plainPassword][second]' => 'newpassword',
-//            'registration_form[agreeTerms]' => 1,
-//        ]);
-//
-//        $client->submit($form);
-//
-//        $client->followRedirect();
-//        $this->assertSelectorTextContains('.flash-success', 'User updated');
-//
-//        $updatedUser = $userRepository->find($user->getId());
-//
-//        $entityManager->refresh($user);
-//        $this->assertEquals('updateduser', $user->getUsername());
-//        $this->assertEquals('Updated', $user->getFirstName());
-//        $this->assertEquals('User', $user->getLastName());
-//        $this->assertEquals('987654321', $user->getPhoneNumber());
-//        $this->assertEquals('updateduser@example.com', $user->getEmail());
-//        $this->assertTrue(password_verify('newpassword', $user->getPassword()));
-//    }
+    public function testUpdateUser()
+    {
+        $client = static::createClient();
+
+        $entityManager = static::getContainer()->get('doctrine')->getManager();
+        $userRepository = $entityManager->getRepository(User::class);
+
+        $user = new User();
+        $user->setUsername('testuser_' . uniqid());
+        $user->setFirstName('Test');
+        $user->setLastName('User');
+        $user->setPhoneNumber('123456789');
+        $user->setEmail('testuser_' . uniqid() . '@example.com');
+        $user->setPassword('$2y$10$xQ9HiGEYrkFgit2Qr2qmR.mqGvCi.iBTOnWXkvaJSDBUSYy1eXdvi');
+        $user->setActive(true);
+        $user->setRoles(['ROLE_USER']);
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        $userId = $user->getId();
+
+        $crawler = $client->request('GET', '/user/' . $userId . '/update');
+
+        $this->assertResponseIsSuccessful();
+
+        $form = $crawler->selectButton('Update')->form([
+            'registration_form[username]' => 'updateduser',
+            'registration_form[firstName]' => 'Updated',
+            'registration_form[lastName]' => 'User',
+            'registration_form[phoneNumber]' => '987654321',
+            'registration_form[email]' => 'updateduser@example.com',
+            'registration_form[plainPassword][first]' => 'newpassword',
+            'registration_form[plainPassword][second]' => 'newpassword',
+            'registration_form[agreeTerms]' => 1,
+        ]);
+
+        $client->submit($form);
+
+        $client->followRedirect();
+
+        $userRepository = static::getContainer()->get(UserRepository::class);
+        $updatedUser = $userRepository->find($userId);
+        $this->assertNotNull($updatedUser);
+        $this->assertEquals('updateduser', $updatedUser->getUsername());
+        $this->assertEquals('Updated', $updatedUser->getFirstName());
+        $this->assertEquals('User', $updatedUser->getLastName());
+        $this->assertEquals('987654321', $updatedUser->getPhoneNumber());
+        $this->assertEquals('updateduser@example.com', $updatedUser->getEmail());
+        $this->assertNotNull($updatedUser->getPassword()); // TODO trouver un moyen de bien comparer les mots de passe
+    }
 
     public function test_deleteUser()
     {
