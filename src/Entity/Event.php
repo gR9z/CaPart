@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 class Event
@@ -17,21 +18,33 @@ class Event
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Event name should not be blank")]
+    #[Assert\Length(min: 4, max: 255)]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\NotBlank(message: "Start date should not be blank")]
+    #[Assert\Type("\DateTimeInterface")]
     private ?\DateTimeInterface $startDateTime = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: "Duration should not be blank")]
+    #[Assert\Positive(message: "Duration should be a positive number")]
     private ?int $duration = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotBlank(message: "Registration deadline should not be blank")]
+    #[Assert\Type("\DateTimeInterface")]
     private ?\DateTimeInterface $registrationDeadline = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: "Max registrations should not be blank")]
+    #[Assert\Positive(message: "Max registrations should be a positive number")]
     private ?int $maxRegistrations = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: "Event details should not be blank")]
+    #[Assert\Length(min: 20, max: 500, minMessage: "Event details should be longer than 20 characters", maxMessage: "Event details should not be longer than 500 characters")]
     private ?string $eventDetails = null;
 
     #[ORM\ManyToOne(inversedBy: 'events')]
@@ -40,10 +53,12 @@ class Event
 
     #[ORM\ManyToOne(inversedBy: 'events')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: "Event place should not be null")]
     private ?Place $place = null;
 
     #[ORM\ManyToOne(inversedBy: 'events')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: "Event location should not be null")]
     private ?Location $location = null;
 
     #[ORM\ManyToOne(inversedBy: 'organizedEvents')]

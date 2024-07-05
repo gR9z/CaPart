@@ -38,7 +38,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $simpleUser->setLastName("Tarantino");
         $simpleUser->setPassword('$2y$13$aZLqx0rob5TAJIb2NMsgCOcy1V7Aq8KYfqExsD0FcfOvopAJOBQym');
         $simpleUser->setEmail('user@capart.fr');
-        $simpleUser->setPhoneNumber($faker->phoneNumber);
+        $simpleUser->setPhoneNumber($faker->phoneNumber());
         $simpleUser->setLocation($faker->randomElement($locationReferences));
         $simpleUser->setRoles([$roles[0]]);
         $simpleUser->setActive(true);
@@ -47,12 +47,12 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $users = [];
         for ($i = 0; $i < 300; $i++) {
             $user = new User();
-            $user->setUsername($faker->userName);
-            $user->setFirstName($faker->firstName);
-            $user->setLastName($faker->lastName);
+            $user->setUsername($faker->userName());
+            $user->setFirstName($faker->firstName());
+            $user->setLastName($faker->lastName());
             $user->setPassword('$2y$13$aZLqx0rob5TAJIb2NMsgCOcy1V7Aq8KYfqExsD0FcfOvopAJOBQym');
-            $user->setEmail($faker->unique()->email);
-            $user->setPhoneNumber($faker->phoneNumber);
+            $user->setEmail($faker->unique()->email());
+            $user->setPhoneNumber($faker->phoneNumber());
             $user->setLocation($faker->randomElement($locationReferences));
             $user->setRoles($faker->randomElements($roles));
             $user->setActive(true);

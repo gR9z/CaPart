@@ -53,23 +53,28 @@ class EventController extends AbstractController
 
     #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
-    public function create(
-        Request $request,
-        EventService $eventService
-    ): Response {
+    public function create(Request $request, EventService $eventService): Response
+    {
         $user = $this->getUser();
 
         if (!$user instanceof User) {
             throw new \LogicException('The user is not an instance of the expected User class.');
         }
 
-        $result = $eventService->createEvent($user, $request);
+        $event = new Event();
+        $form = $this->createForm(EventType::class, $event, [
+            'location' => $user->getLocation()
+        ]);
 
-        if ($result['success']) {
-            $this->addFlash('success', $result['message']);
-            return $this->redirectToRoute('events_list');
-        } else {
-            if (isset($result['message'])) {
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $result = $eventService->createEvent($user, $event);
+
+            if ($result['success']) {
+                $this->addFlash('success', $result['message']);
+                return $this->redirectToRoute('events_list');
+            } else {
                 $this->addFlash('error', $result['message']);
             }
         }
