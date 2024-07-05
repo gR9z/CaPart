@@ -14,57 +14,37 @@ use Symfony\Component\HttpFoundation\Request;
 class EventService
 {
     private EntityManagerInterface $entityManager;
-    private FormFactoryInterface $formFactory;
 
-    public function __construct(
-        EntityManagerInterface $entityManager,
-        FormFactoryInterface   $formFactory,
-    )
+    public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
-        $this->formFactory = $formFactory;
     }
 
-    public function createEvent(User $user, Request $request): array
+    public function createEvent(User $user, Event $event): array
     {
         $location = $user->getLocation();
 
-        $event = new Event();
-        $form = $this->formFactory->create(EventType::class, $event, [
-            'location' => $location,
-        ]);
+        $stateCreated = $this->entityManager->getRepository(State::class)->findOneBy(['label' => StateLabel::Created]);
 
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $stateCreated = $this->entityManager->getRepository(State::class)->findOneBy(['label' => StateLabel::Created]);
-
-            if ($stateCreated === null) {
-                return [
-                    'success' => false,
-                    'form' => $form,
-                    'message' => 'The default state "created" was not found in the database.'
-                ];
-            }
-
-            $event->setState($stateCreated);
-            $event->setLocation($location);
-            $event->setOrganizer($user);
-            $event->addParticipant($user);
-
-            $this->entityManager->persist($event);
-            $this->entityManager->flush();
-
+        if ($stateCreated === null) {
             return [
-                'success' => true,
-                'event' => $event,
-                'message' => 'Event created!'
+                'success' => false,
+                'message' => 'The default state "created" was not found in the database.'
             ];
         }
 
+        $event->setState($stateCreated);
+        $event->setLocation($location);
+        $event->setOrganizer($user);
+        $event->addParticipant($user);
+
+        $this->entityManager->persist($event);
+        $this->entityManager->flush();
+
         return [
-            'success' => false,
-            'form' => $form
+            'success' => true,
+            'event' => $event,
+            'message' => 'Event created!'
         ];
     }
 }
