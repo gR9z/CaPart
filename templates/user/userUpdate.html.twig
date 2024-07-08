@@ -11,17 +11,10 @@
         <div class="alert alert-danger " role="alert">{{ flash_error }}</div>
     {% endfor %}
 
-
     {{ form_errors(form) }}
 
     {{ form_start(form) }}
-    {{ form_row(form.email) }}
-    {{ form_row(form.plainPassword, {
-        label: 'New password'
-    }) }}
-    {{ form_row(form.agreeTerms) }}
-    <div class ="space-x-4 grid justify-items-center">
-        <button type="submit" class="btn focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-white bg-[#fd00c5]  cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">Update</button>
-        <button type="reset" class="btn focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-white bg-[#fd00c5]  cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">Cancel</button>
-    </div>    {{ form_end(form) }}
+
+    {{ form_end(form) }}
+
 {% endblock %}

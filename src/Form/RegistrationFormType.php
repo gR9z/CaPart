@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Location;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -71,8 +72,14 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('register', SubmitType::class, [
-                'label' => 'Register'
+            ->add('save', SubmitType::class, [
+                'label' => 'Save',
+            ])
+            ->add('cancel', ButtonType::class, [
+                'label' => 'Cancel',
+                'attr' => [
+                    'onclick' =>'window.history.back()',
+                ]
             ]);
     }
 

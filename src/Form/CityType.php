@@ -21,6 +21,15 @@ class CityType extends AbstractType
             ])
             ->add('zipCode', TextType::class, [
                 'label' => "Zip code",
+            ])
+            ->add('save', SubmitType::class, [
+                'label' => 'Save',
+            ])
+            ->add('cancel', ButtonType::class, [
+                'label' => 'Cancel',
+                'attr' => [
+                    'onclick' =>'window.history.back()',
+                ]
             ]);
 
     }

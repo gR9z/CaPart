@@ -8,6 +8,7 @@ use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,13 +26,23 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/{id}', name: 'user_details', methods: ['GET'])]
-    public function show(UserRepository $userRepository, int $id): Response
+    public function show(UserRepository $userRepository,Security $security, ?int $id = null): Response
     {
-        $user = $userRepository->find($id);
+        $loggedInUser = $security->getUser();
 
-        return $this->render('user/userDetails.html.twig', [
-            'user' => $user,
-        ]);
+        if($id !== null) {
+            $user = $userRepository->find($id);
+        } else {
+            $user = $loggedInUser;
+        }
+
+        if($user) {
+            return $this->render('user/userDetails.html.twig', [
+                'user' => $user,
+            ]);
+        }
+
+        throw $this->createNotFoundException('User not found');
     }
 
     #[Route('/user/{id}/update', name: 'user_update', methods: ['GET', 'POST'])]
