@@ -4,77 +4,113 @@
 
 {% block body %}
     <div class="">
-        <h1 class="text-4xl text-center pt-6   ">Register</h1>
+        <h1 class="text-2xl font-bold text-center mb-4 dark:text-gray-200">Register</h1>
         <div class="flex items-center justify-center p-12">
-            <!-- Author: FormBold Team -->
             <div class="mx-auto w-full max-w-[550px] bg-white">
-                <form method="post">
-                    <div class="mb-5">
-                        <label for="username" class="mb-3 block text-base font-medium text-[#07074D]">
-                            Username
-                        </label>
-                        <input type="text" name="username" id="username" placeholder="Username"
-                               class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"/>
+                {{ form_start(registrationForm) }}
+
+                <div class="mb-4">
+                    {{ form_label(registrationForm.username, 'Username', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'}}) }}
+                    {{ form_widget(registrationForm.username, {'attr': {'class': 'shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500', 'placeholder': 'your@email.com', 'required': 'required', 'autofocus': 'autofocus'}}) }}
+                    {% if registrationForm.username.vars.errors|length > 0 %}
+                        <div class="text-red-500 text-sm mt-2">
+                            {{ form_errors(registrationForm.username) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(registrationForm.firstName, 'First Name', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'}}) }}
+                    {{ form_widget(registrationForm.firstName, {'attr': {'class': 'shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500', 'placeholder': 'First Name'}}) }}
+                    {% if registrationForm.firstName.vars.errors|length > 0 %}
+                        <div class="text-red-500 text-sm mt-2">
+                            {{ form_errors(registrationForm.firstName) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(registrationForm.lastName, 'Last Name', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'}}) }}
+                    {{ form_widget(registrationForm.lastName, {'attr': {'class': 'shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500', 'placeholder': 'Last Name'}}) }}
+                    {% if registrationForm.lastName.vars.errors|length > 0 %}
+                        <div class="text-red-500 text-sm mt-2">
+                            {{ form_errors(registrationForm.lastName) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(registrationForm.phoneNumber, 'Phone Number', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'}}) }}
+                    {{ form_widget(registrationForm.phoneNumber, {'attr': {'class': 'shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500', 'placeholder': 'Phone Number'}}) }}
+                    {% if registrationForm.phoneNumber.vars.errors|length > 0 %}
+                        <div class="text-red-500 text-sm mt-2">
+                            {{ form_errors(registrationForm.phoneNumber) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(registrationForm.email, 'Email Address', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'}}) }}
+                    {{ form_widget(registrationForm.email, {'attr': {'class': 'shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500', 'placeholder': 'Enter your email'}}) }}
+                    {% if registrationForm.email.vars.errors|length > 0 %}
+                        <div class="text-red-500 text-sm mt-2">
+                            {{ form_errors(registrationForm.email) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(registrationForm.plainPassword.first, 'Password', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'}}) }}
+                    {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
+                    {% if registrationForm.plainPassword.first.vars.errors|length > 0 %}
+                        <div class="text-red-500 text-sm mt-2">
+                            {{ form_errors(registrationForm.plainPassword.first) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(registrationForm.plainPassword.second, 'Confirm Password', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'}}) }}
+                    {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(registrationForm.location, 'Location', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'}}) }}
+                    {{ form_widget(registrationForm.location, {'attr': {'class': 'shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
+                    {% if registrationForm.location.vars.errors|length > 0 %}
+                        <div class="text-red-500 text-sm mt-2">
+                            {{ form_errors(registrationForm.location) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center">
+                        {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 focus:outline-none'}}) }}
+                        {{ form_label(registrationForm.agreeTerms, 'Agree to Terms', {'label_attr': {'class': 'ml-2 block text-sm text-gray-700 dark:text-gray-300'}}) }}
                     </div>
 
-                    <div class="mb-5">
-                        <label for="firstName" class="mb-3 block text-base font-medium text-[#07074D]">
-                            firstName
-                        </label>
-                        <input type="text" name="name" id="name" placeholder="firstName"
-                               class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"/>
-                    </div>
-
-
-                    <div class="mb-5">
-                        <label for="Lastname" class="mb-3 block text-base font-medium text-[#07074D]">
-                            Surname
-                        </label>
-                        <input type="text" Lastname="Surname" id="Lastname" placeholder="Lastname"
-                               class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"/>
-                    </div>
-
-
-                    <div class="mb-5">
-                        <label for="phoneNumber" class="mb-3 block text-base font-medium text-[#07074D]">
-                            Phone Number
-                        </label>
-                        <input type="text" name="phoneNumber" id="phone" placeholder="Enter your phone number"
-                               class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"/>
-                    </div>
-                    <div class="mb-5">
-                        <label for="email" class="mb-3 block text-base font-medium text-[#07074D]">
-                            Email Address
-                        </label>
-                        <input type="email" name="email" id="email" placeholder="Enter your email"
-                               class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"/>
-                    </div>
-
-                    <div class="mb-5">
-                        <label for="Verify-email" class="mb-3 block text-base font-medium text-[#07074D]">
-                            <div class="mb-5">
-                                <label for="email" class="mb-3 block text-base font-medium text-[#07074D]">
-                                    Verify-Email
-                                </label>
-                                <input type="plainPassword" name="plainPassword" id="plainPassword" placeholder="Verify-Email"
-                                       class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"/>
+                    <div class="mb-4">
+                        {% if registrationForm.agreeTerms.vars.errors|length > 0 %}
+                            <div class="text-red-500 text-sm mt-2">
+                                {{ form_errors(registrationForm.agreeTerms) }}
                             </div>
+                        {% endif %}
+                    </div>
+                </div>
 
+                <div>
+                    {{ form_widget(registrationForm.register, {'attr': {'class': 'w-full flex justify-center py-2 px-4 border border-transparent rounded-md
+                    shadow-sm text-sm font-medium text-white bg-[#fd00c5] hover:bg-[#fd00c5] focus:outline-none
+                    focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'}}) }}
+                </div>
 
-                            <div>
-                                <button
-                                        type="submit"
-                                        class="hover:shadow-form w-full rounded-md bg-[#fd00c5] py-3 px-8 text-center text-base font-semibold text-white outline-none uppercase">
-                                    ça démarre !
-                                </button>
-                            </div>
-                </form>
+                <input type="hidden" name="_csrf_token"
+                       value="{{ csrf_token('authenticate') }}"
+                >
+
+                {{ form_end(registrationForm) }}
             </div>
         </div>
     </div>
-
-
 {% endblock %}
-
-
-

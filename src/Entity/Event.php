@@ -19,7 +19,12 @@ class Event
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Event name should not be blank")]
-    #[Assert\Length(min: 4, max: 255)]
+    #[Assert\Length(
+        min: 4,
+        max: 255,
+        minMessage: 'Event name should be at least {{ limit }} characters long',
+        maxMessage: 'Event name should not be longer than {{ limit }} characters'
+    )]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -44,7 +49,7 @@ class Event
 
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank(message: "Event details should not be blank")]
-    #[Assert\Length(min: 20, max: 500, minMessage: "Event details should be longer than 20 characters", maxMessage: "Event details should not be longer than 500 characters")]
+    #[Assert\Length(min: 20, max: 500, minMessage: "Event details should be longer than {{ limit }} characters", maxMessage: "Event details should not be longer than {{ limit }} characters")]
     private ?string $eventDetails = null;
 
     #[ORM\ManyToOne(inversedBy: 'events')]
