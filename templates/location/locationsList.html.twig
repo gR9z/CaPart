@@ -5,6 +5,14 @@
 {% block body %}
     <h1>Location List</h1>
 
+    <div>
+        {{ form_start(searchForm) }}
+        {{ form_widget(searchForm.name) }}
+        {{ form_widget(searchForm.search) }}
+        {{ form_widget(searchForm.clear) }}
+        {{ form_end(searchForm) }}
+    </div>
+
     <table class="table">
         <thead>
         <tr>

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\City;
+use App\Form\CitySearchType;
 use App\Form\CityType;
 use App\Repository\CityRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,8 +17,6 @@ class CityController extends AbstractController
     #[Route('/cities', name:'cities_list', methods: ['GET', 'POST'])]
     public function citiesList(CityRepository $cityRepository, EntityManagerInterface $entityManager, Request $request): Response
     {
-        $cities = $cityRepository->findAll();
-
         $city = new City();
         $form = $this->createForm(CityType::class, $city);
         $form->handleRequest($request);
@@ -31,9 +30,20 @@ class CityController extends AbstractController
             return $this->redirectToRoute('cities_list');
         }
 
+        $searchForm = $this->createForm(CitySearchType::class);
+        $searchForm->handleRequest($request);
+
+        if($searchForm-> isSubmitted() && $searchForm->isValid()) {
+            $criteria = $searchForm->getData();
+            $cities = $cityRepository->findByName($criteria['name']);
+        } else {
+            $cities = $cityRepository->findAll();
+        }
+
         return $this->render('city/citiesList.html.twig', [
             'cities' => $cities,
             'form' => $form->createView(),
+            'searchForm' => $searchForm->createView(),
         ]);
     }
 
