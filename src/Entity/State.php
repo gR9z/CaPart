@@ -35,9 +35,9 @@ class State
         return $this->id;
     }
 
-    public function getLabel(): ?StateLabel
+    public function getLabel(): string
     {
-        return $this->label !== null ? StateLabel::from($this->label) : null;
+        return $this->label;
     }
 
     public function setLabel(?StateLabel $label): self
