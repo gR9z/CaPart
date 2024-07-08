@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -35,16 +36,60 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 30)]
+    #[Assert\NotBlank(message: "Username can't be blank")]
+    #[Assert\Length(
+        min: 4,
+        max: 30,
+        minMessage: "Username must be at least {{ limit }} characters long",
+        maxMessage: "Username cannot be longer than {{ limit }} characters"
+    )]
+    #[Assert\Regex(
+        pattern: "/^[a-zA-Z0-9_]+$/",
+        message: "Username can only contain letters, numbers, and underscores"
+    )]
     private ?string $username = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 30)]
+    #[Assert\NotBlank(message: "First name can't be blank")]
+    #[Assert\Length(
+        min: 2,
+        max: 30,
+        minMessage: "First name must be at least {{ limit }} characters long",
+        maxMessage: "First name cannot be longer than {{ limit }} characters"
+    )]
+    #[Assert\Regex(
+        pattern: "/^[a-zA-ZÀ-ÖØ-öø-ÿ' -]+$/",
+        message: "First name can only contain letters, apostrophes, hyphens, and spaces"
+    )]
     private ?string $firstName = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 30)]
+    #[Assert\NotBlank(message: "First name can't be blank")]
+    #[Assert\Length(
+        min: 2,
+        max: 30,
+        minMessage: "Lastname must be at least {{ limit }} characters long",
+        maxMessage: "Lastname cannot be longer than {{ limit }} characters"
+    )]
+    #[Assert\Regex(
+        pattern: "/^[a-zA-ZÀ-ÖØ-öø-ÿ' -]+$/",
+        message: "Lastname can only contain letters, apostrophes, hyphens, and spaces"
+    )]
     private ?string $lastName = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 20)]
+    #[Assert\NotBlank(message: "Phone number can't be blank")]
+    #[Assert\Length(
+        min: 8,
+        max: 20,
+        minMessage: "Phone number must be at least {{ limit }} characters long",
+        maxMessage: "Phone number cannot be longer than {{ limit }} characters"
+    )]
+    #[Assert\Regex(
+        pattern: "/^\+?[0-9\s\-\(\)]+$/",
+        message: "Phone number can only contain digits, spaces, hyphens, parentheses, and optionally start with a plus sign"
+    )]
     private ?string $phoneNumber = null;
 
     #[ORM\Column]
@@ -54,6 +99,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?bool $isActive = null;
 
     #[ORM\ManyToOne(inversedBy: 'user')]
+    #[Assert\NotNull(message: "Location must be selected.")]
     private ?Location $location = null;
 
     /**
