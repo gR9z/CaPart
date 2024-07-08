@@ -13,19 +13,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class LocationController extends AbstractController
 {
-    #[Route('/locations', name: 'locations_list', methods: ['GET'])]
-    public function locationsList(LocationRepository $locationRepository): Response
+    #[Route('/locations', name: 'locations_list', methods: ['GET', 'POST'])]
+    public function locationsList(LocationRepository $locationRepository, EntityManagerInterface $entityManager, Request $request): Response
     {
         $locations = $locationRepository->findAll();
 
-        return $this->render('location/locationsList.html.twig', [
-            'locations' => $locations,
-        ]);
-    }
-
-    #[Route('/locations/create', name: 'location_create', methods: ['GET', 'POST'])]
-    public function createLocation(Request $request, EntityManagerInterface $entityManager): Response
-    {
         $location = new Location();
         $form = $this->createForm(LocationType::class, $location);
         $form->handleRequest($request);
@@ -39,7 +31,8 @@ class LocationController extends AbstractController
             return $this->redirectToRoute('locations_list');
         }
 
-        return $this->render('location/locationCreate.html.twig', [
+        return $this->render('location/locationsList.html.twig', [
+            'locations' => $locations,
             'form' => $form->createView(),
         ]);
     }

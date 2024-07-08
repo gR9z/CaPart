@@ -22,6 +22,17 @@
                 </td>
             </tr>
         {% endfor %}
+        <tr>
+            <form action="{{ path('locations_list') }}" method="post">
+                <td>
+                    {{ form_widget(form.name) }}
+                </td>
+                <td>
+                    <button type="submit">Add location</button>
+                </td>
+                {{ form_rest(form) }}
+            </form>
+        </tr>
         </tbody>
     </table>
 {% endblock %}

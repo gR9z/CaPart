@@ -23,12 +23,20 @@
                                 </td>
                             </tr>
                         {% endfor %}
+                        <tr>
+                            <form action="{{ path('cities_list') }}" method="post">
+                                <td>
+                                    {{ form_widget(form.name) }}
+                                </td>
+                                <td>
+                                    {{ form_widget(form.zipCode) }}
+                                </td>
+                                <td>
+                                    <button type="submit">Add city</button>
+                                </td>
+                                {{ form_rest(form) }}
+                            </form>
+                        </tr>
                         </tbody>
-
                     </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
 {% endblock %}

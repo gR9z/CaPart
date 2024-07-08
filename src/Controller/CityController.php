@@ -13,19 +13,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CityController extends AbstractController
 {
-    #[Route('/cities', name:'cities_list', methods: ['GET'])]
-    public function citiesList(CityRepository $cityRepository): Response
+    #[Route('/cities', name:'cities_list', methods: ['GET', 'POST'])]
+    public function citiesList(CityRepository $cityRepository, EntityManagerInterface $entityManager, Request $request): Response
     {
         $cities = $cityRepository->findAll();
 
-        return $this->render('city/citiesList.html.twig', [
-            'cities' => $cities,
-        ]);
-    }
-
-    #[Route('/cities/create', name: 'city_create', methods: ['GET', 'POST'])]
-    public function createCity(Request $request, EntityManagerInterface $entityManager): Response
-    {
         $city = new City();
         $form = $this->createForm(CityType::class, $city);
         $form->handleRequest($request);
@@ -39,10 +31,12 @@ class CityController extends AbstractController
             return $this->redirectToRoute('cities_list');
         }
 
-        return $this->render('city/cityCreate.html.twig', [
+        return $this->render('city/citiesList.html.twig', [
+            'cities' => $cities,
             'form' => $form->createView(),
         ]);
     }
+
 
     #[Route('cities/{id}/update', name: 'city_update', methods: ['GET', 'POST'])]
     public function updateCity(Request $request, City $city, EntityManagerInterface $entityManager): Response
