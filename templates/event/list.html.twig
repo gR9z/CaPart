@@ -44,7 +44,7 @@
                         {% if not event.isUserRegistered(app.user) and event.registrationDeadline > "now"|date('Y-m-d H:i') %}
                             <a href="{{ path('events_register', {'id': event.id}) }}">Register</a>
                         {% elseif event.isUserRegistered(app.user) %}
-                            <a href="{{ path('events_update', {'id': event.id}) }}">Unregister</a>
+                            <a href="{{ path('events_unregister', {'id': event.id}) }}">Unregister</a>
                         {% endif %}
                     {% endif %}
                 </td>

@@ -67,6 +67,27 @@ class EventService
         ];
     }
 
+    public function unregisterUserFromEvent(Event $event): array
+    {
+        $user = $this->userService->getAuthenticatedUser();
+
+        if (!$event->getParticipants()->contains($user)) {
+            return [
+                'success' => false,
+                'message' => 'You are not registered for this event'
+            ];
+        }
+
+        $event->removeParticipant($user);
+        $this->entityManager->persist($event);
+        $this->entityManager->flush();
+
+        return [
+            'success' => true,
+            'message' => 'You have successfully unregistered from the event'
+        ];
+    }
+
     private function validateRegistration(Event $event, User $user): array
     {
         $checks = [

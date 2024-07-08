@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\City;
 use App\Entity\Event;
 use App\Entity\Place;
-use App\Entity\User;
 use App\Form\EventType;
 use App\Repository\EventRepository;
 use App\Service\EventService;
@@ -28,7 +27,7 @@ class EventController extends AbstractController
     private UserService $userService;
     private SluggerInterface $slugger;
 
-    public function __construct(EventService $eventService,UserService $userService, SluggerInterface $slugger)
+    public function __construct(EventService $eventService, UserService $userService, SluggerInterface $slugger)
     {
         $this->slugger = $slugger;
         $this->userService = $userService;
@@ -128,7 +127,7 @@ class EventController extends AbstractController
         return $this->redirectToRoute('events_list');
     }
 
-    #[Route('/events/register/{id}', name: 'register', requirements: ['id' => '\d+'], methods: ['GET'])]
+    #[Route('/register/{id}', name: 'register', requirements: ['id' => '\d+'], methods: ['GET'])]
     #[IsGranted('ROLE_USER')]
     public function register(int $id, EventRepository $eventRepository): Response
     {
@@ -148,6 +147,28 @@ class EventController extends AbstractController
 
         return $this->redirectToRoute('events_details', ['slug' => $this->slugger->slug(strtolower($event->getName())), 'id' => $event->getId()]);
     }
+
+    #[Route('/unregister/{id}', name: 'unregister', requirements: ['id' => '\d+'], methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
+    public function unregister(int $id, EventRepository $eventRepository): Response
+    {
+        $event = $eventRepository->find($id);
+
+        if (!$event) {
+            throw $this->createNotFoundException('Event not found');
+        }
+
+        $result = $this->eventService->unregisterUserFromEvent($event);
+
+        if ($result['success']) {
+            $this->addFlash('success', $result['message']);
+        } else {
+            $this->addFlash('error', $result['message']);
+        }
+
+        return $this->redirectToRoute('events_details', ['slug' => $this->slugger->slug(strtolower($event->getName())), 'id' => $event->getId()]);
+    }
+
     #[Route('/places', name: 'get_places_by_city', methods: ['GET'])]
     public function getPlacesByCity(Request $request, EntityManagerInterface $em): JsonResponse
     {
