@@ -31,13 +31,15 @@ class CityRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?City
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        public function findByName(?string $name): array
+        {
+            $qb = $this->createQueryBuilder('c');
+
+            if ($name) {
+                $qb->andWhere('c.name LIKE :name')
+                    ->setParameter('name', '%' . $name . '%');
+            }
+
+            return $qb->getQuery()->getResult();
+        }
 }

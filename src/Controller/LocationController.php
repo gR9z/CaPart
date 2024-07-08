@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Location;
+use App\Form\LocationSearchType;
 use App\Form\LocationType;
 use App\Repository\LocationRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,9 +32,20 @@ class LocationController extends AbstractController
             return $this->redirectToRoute('locations_list');
         }
 
+        $searchForm = $this->createForm(LocationSearchType::class);
+        $searchForm->handleRequest($request);
+
+        if($searchForm-> isSubmitted() && $searchForm->isValid()) {
+            $criteria = $searchForm->getData();
+            $locations = $locationRepository->findByName($criteria['name']);
+        } else {
+            $locations = $locationRepository->findAll();
+        }
+
         return $this->render('location/locationsList.html.twig', [
             'locations' => $locations,
             'form' => $form->createView(),
+            'searchForm' => $searchForm->createView(),
         ]);
     }
 
