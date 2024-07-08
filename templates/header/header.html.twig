@@ -22,6 +22,10 @@
                         class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
                         <a href="{{ path('events_list') }}">Events</a></li>
                     </li>
+                    <li onclick="selected()"
+                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
+                        <a href="{{ path('user_details', {'id': app.user.id} ) }}">My profile</a></li>
+                    </li>
                 {% endif %}
                 {% if is_granted('ROLE_ADMIN') %}
                     <li onclick="selected()"
@@ -35,6 +39,12 @@
                     <li onclick="selected()"
                         class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
                         <a href="{{ path('locations_list') }}">Locations</a></li>
+                    </li>
+                {% endif %}
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <li onclick="selected()"
+                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
+                        <a href="{{ path('app_logout') }}">Logout</a></li>
                     </li>
                 {% endif %}
             </ul>
