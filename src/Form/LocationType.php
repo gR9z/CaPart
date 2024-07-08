@@ -17,6 +17,15 @@ class LocationType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Location name'
+            ])
+            ->add('save', SubmitType::class, [
+                'label' => 'Save',
+            ])
+            ->add('cancel', ButtonType::class, [
+                'label' => 'Cancel',
+                'attr' => [
+                    'onclick' =>'window.history.back()',
+                ]
             ]);
     }
 
