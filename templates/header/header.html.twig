@@ -1,50 +1,50 @@
 <header>
-    <div class="bg-white rounded shadow-lg py-5 px-7">
-        <nav class="flex justify-between max-w-7xl mx-auto">
+    <div class="bg-white rounded py-5 px-7 shadow-lg">
+        <nav class="flex justify-between container mx-auto">
             <div class="flex items-center space-x-3">
                 <a href="{{ path('app_login') }}">
                     <img class="w-80 h-full" src="/images/logo.svg" alt="logo image">
                 </a>
             </div>
-
             <ul class="hidden md:flex items-center space-x-2 ">
                 {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
                     <li onclick="selected()"
                         class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-white bg-[#fd00c5]  cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
-                        <a href="{{ path('app_login') }}">Login</a></li>
+                        <a href="{{ path('app_login') }}">Login</a>
+                    </li>
                     <li onclick="selected()"
                         class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border bg-[#fd00c5] border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
-                        <a href="{{ path('app_register') }}">Sign Up</a></li>
+                        <a href="{{ path('app_register') }}">Sign Up</a>
                     </li>
                 {% endif %}
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     <li onclick="selected()"
                         class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
-                        <a href="{{ path('events_list') }}">Events</a></li>
+                        <a href="{{ path('events_list') }}">Events</a>
                     </li>
                     <li onclick="selected()"
                         class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
-                        <a href="{{ path('user_details', {'id': app.user.id} ) }}">My profile</a></li>
+                        <a href="{{ path('user_details', {'id': app.user.id} ) }}">My profile</a>
                     </li>
                 {% endif %}
                 {% if is_granted('ROLE_ADMIN') %}
                     <li onclick="selected()"
                         class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
-                        <a href="{{ path('user_list') }}">List</a></li>
+                        <a href="{{ path('user_list') }}">List</a>
                     </li>
                     <li onclick="selected()"
                         class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
-                        <a href="{{ path('cities_list') }}">Cities</a></li>
+                        <a href="{{ path('cities_list') }}">Cities</a>
                     </li>
                     <li onclick="selected()"
                         class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
-                        <a href="{{ path('locations_list') }}">Locations</a></li>
+                        <a href="{{ path('locations_list') }}">Locations</a>
                     </li>
                 {% endif %}
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     <li onclick="selected()"
                         class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
-                        <a href="{{ path('app_logout') }}">Logout</a></li>
+                        <a href="{{ path('app_logout') }}">Logout</a>
                     </li>
                 {% endif %}
             </ul>

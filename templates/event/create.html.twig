@@ -7,61 +7,201 @@
  {% endblock %}
 
 {% block body %}
-    <h2>Create a new event</h2>
+    <h1 class="text-2xl font-bold text-center dark:text-gray- mb-8">Create a new event</h1>
 
-    {{ form_start(form) }}
-    <div class="errors">
-        {{ form_errors(form) }}
-    </div>
+    <div class="max-w-80	 mx-auto ">
+        <div class="flex flex-col md:flex-row gap-6">
+            <div class="mx-auto w-full bg-white">
+                {{ form_start(form) }}
 
-    <div class="form__container">
-        <div class="form__row">
-            <div class="form__col">
-                {{ form_row(form.name) }}
+                <div class="mb-4">
+                    {{ form_label(form.name, 'Name', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'}}) }}
+                    {{ form_widget(form.name, {'attr': {'class': 'shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500', 'required': 'required', 'autofocus': 'autofocus'}}) }}
+                    {% if form.name.vars.errors|length > 0 %}
+                        <div class="text-red-500 text-sm mt-2">
+                            {{ form_errors(form.name) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(form.startDateTime, 'Start date', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'}}) }}
+                    {{ form_widget(form.startDateTime, {'attr': {'class': 'shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500' }}) }}
+                    {% if form.startDateTime.vars.errors|length > 0 %}
+                        <div class="text-red-500 text-sm mt-2">
+                            {{ form_errors(form.startDateTime) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(form.registrationDeadline, 'Registration deadline', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'}}) }}
+                    {{ form_widget(form.registrationDeadline, {'attr': {'class': 'shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500' }}) }}
+                    {% if form.registrationDeadline.vars.errors|length > 0 %}
+                        <div class="text-red-500 text-sm mt-2">
+                            {{ form_errors(form.registrationDeadline) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(form.maxRegistrations, 'Max registration', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'}}) }}
+                    {{ form_widget(form.maxRegistrations, {'attr': {'class': 'shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500', 'placeholder': 20, 'min': 2}}) }}
+                    {% if form.maxRegistrations.vars.errors|length > 0 %}
+                        <div class="text-red-500 text-sm mt-2">
+                            {{ form_errors(form.maxRegistrations) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(form.duration, 'Duration (in mins)', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'}}) }}
+                    {{ form_widget(form.duration, {'attr': {'class': 'shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500', 'min': 15, 'step': '15' }}) }}
+                    {% if form.duration.vars.errors|length > 0 %}
+                        <div class="text-red-500 text-sm mt-2">
+                            {{ form_errors(form.duration) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(form.eventDetails, 'Details', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'}}) }}
+                    {{ form_widget(form.eventDetails, {'attr': {'class': 'shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500' }}) }}
+                    {% if form.eventDetails.vars.errors|length > 0 %}
+                        <div class="text-red-500 text-sm mt-2">
+                            {{ form_errors(form.eventDetails) }}
+                        </div>
+                    {% endif %}
+                </div>
             </div>
-            <div class="form__col">
-                {{ form_row(form.startDateTime) }}
+
+            <div class="mx-auto w-full bg-white">
+                <div class="mb-4">
+                    {{ form_label(form.location, 'Location', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'}}) }}
+                    {{ form_widget(form.location, {'attr': {'class': 'shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
+                    {% if form.location.vars.errors|length > 0 %}
+                        <div class="text-red-500 text-sm mt-2">
+                            {{ form_errors(form.location) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(form.city, 'City', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'}}) }}
+                    {{ form_widget(form.city, {'attr': {'class': 'shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
+                    {% if form.city.vars.errors|length > 0 %}
+                        <div class="text-red-500 text-sm mt-2">
+                            {{ form_errors(form.city) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4" id="place-select-wrapper">
+                    {{ form_label(form.place, 'Place', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'}}) }}
+                    {{ form_widget(form.place, {'attr': {'class': 'shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
+                    {% if form.city.vars.errors|length > 0 %}
+                        <div class="text-red-500 text-sm mt-2">
+                            {{ form_errors(form.place) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4 hidden" id="place-details">
+                    <p><strong>Street:</strong> <span id="place-street"></span></p>
+                    <p><strong>Longitude:</strong> <span id="place-longitude"></span></p>
+                    <p><strong>Latitude:</strong> <span id="place-latitude"></span></p>
+                </div>
             </div>
-            <div class="form__col">
-                {{ form_row(form.registrationDeadline) }}
-            </div>
-            <div class="form__col">
-                {{ form_row(form.maxRegistrations) }}
-            </div>
-            <div class="form__col">
-                {{ form_row(form.duration) }}
-            </div>
-            <div class="form__col">
-                {{ form_row(form.eventDetails) }}
-            </div>
+
+
         </div>
 
-        <div class="form__row">
-            <div class="form__col">
-                {{ form_row(form.location) }}
+        <div>
+            <div>
+                {{ form_widget(form.submit, {'attr': {'class': 'w-full flex justify-center py-2 px-4 border border-transparent rounded-md
+                    shadow-sm text-sm font-medium text-white bg-[#fd00c5] hover:bg-[#fd00c5] focus:outline-none
+                    focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'}}) }}
             </div>
 
-            <div class="form__col">
-                {{ form_row(form.city) }}
-            </div>
+            <input type="hidden" name="_csrf_token"
+                   value="{{ csrf_token('authenticate') }}"
+            >
 
-            <div class="form__col" id="place-select-wrapper">
-                {{ form_row(form.place) }}
-            </div>
-
-            <div class="form__col" id="place-details" style="display: none;">
-                <p><strong>Street:</strong> <span id="place-street"></span></p>
-                <p><strong>Longitude:</strong> <span id="place-longitude"></span></p>
-                <p><strong>Latitude:</strong> <span id="place-latitude"></span></p>
-            </div>
+            {{ form_end(form) }}
         </div>
-
-        <input type="hidden" name="_csrf_token"
-               value="{{ csrf_token('authenticate') }}"
-        >
     </div>
 
-    {{ form_end(form) }}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    {#    <h2>Create a new event</h2> #}
+
+    {#    {{ form_start(form) }} #}
+    {#    <div class="errors"> #}
+    {#        {{ form_errors(form) }} #}
+    {#    </div> #}
+
+    {#    <div class="form__container"> #}
+    {#        <div class="form__row"> #}
+    {#            <div class="form__col"> #}
+    {#                {{ form_row(form.name) }} #}
+    {#            </div> #}
+    {#            <div class="form__col"> #}
+    {#                {{ form_row(form.startDateTime) }} #}
+    {#            </div> #}
+    {#            <div class="form__col"> #}
+    {#                {{ form_row(form.registrationDeadline) }} #}
+    {#            </div> #}
+    {#            <div class="form__col"> #}
+    {#                {{ form_row(form.maxRegistrations) }} #}
+    {#            </div> #}
+    {#            <div class="form__col"> #}
+    {#                {{ form_row(form.duration) }} #}
+    {#            </div> #}
+    {#            <div class="form__col"> #}
+    {#                {{ form_row(form.eventDetails) }} #}
+    {#            </div> #}
+    {#        </div> #}
+
+    {#        <div class="form__row"> #}
+    {#            <div class="form__col"> #}
+    {#                {{ form_row(form.location) }} #}
+    {#            </div> #}
+
+    {#            <div class="form__col"> #}
+    {#                {{ form_row(form.city) }} #}
+    {#            </div> #}
+
+    {#            <div class="form__col" id="place-select-wrapper"> #}
+    {#                {{ form_row(form.place) }} #}
+    {#            </div> #}
+
+    {#            <div class="form__col" id="place-details" style="display: none;"> #}
+    {#                <p><strong>Street:</strong> <span id="place-street"></span></p> #}
+    {#                <p><strong>Longitude:</strong> <span id="place-longitude"></span></p> #}
+    {#                <p><strong>Latitude:</strong> <span id="place-latitude"></span></p> #}
+    {#            </div> #}
+    {#        </div> #}
+
+    {#        <input type="hidden" name="_csrf_token" #}
+    {#               value="{{ csrf_token('authenticate') }}" #}
+    {#        > #}
+    {#    </div> #}
+
+    {#    {{ form_end(form) }} #}
 
 {% endblock %}
 

@@ -94,7 +94,7 @@ class EventService
             $this->checkIfUserIsRegistered($event, $user),
             $this->checkRegistrationDeadline($event),
             $this->checkIfEventIsFull($event),
-            $this->checkIfEventIsOpen($event)
+            $this->checkIfEventIsOpenOrOngoing($event)
         ];
 
         foreach ($checks as $check) {
@@ -130,9 +130,9 @@ class EventService
         return ['success' => true];
     }
 
-    private function checkIfEventIsOpen(Event $event): array
+    private function checkIfEventIsOpenOrOngoing(Event $event): array
     {
-        if ($event->getState()->getLabel() !== 'open') {
+        if ($event->getState()->getLabel() !== 'open' && $event->getState()->getLabel() !== 'ongoing' ) {
             return [
                 'success' => false,
                 'message' => 'The event is not open for registration'

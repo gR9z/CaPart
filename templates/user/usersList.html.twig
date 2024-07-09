@@ -1,20 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User List{% endblock %}
+{% block title %}Member list{% endblock %}
 
 {% block body %}
-    <h1 class="justify-center " >User List</h1>
-
-    <section class="container px-4 mx-auto">
+    <section>
         <div class="flex flex-col">
-            <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div class="inline-block min-w-full align-middle">
-                    <div class="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
+
+            <div class="flex flex-col gap-3 md:flex-row justify-between mb-8">
+                <h1 class="text-2xl font-bold text-center dark:text-gray-200">Member list</h1>
+                <button class="flex justify-center py-2 px-4 border border-transparent rounded-md
+                shadow-sm text-sm font-medium text-white bg-[#fd00c5] hover:bg-[#fd00c5] focus:outline-none
+                focus:ring-2 focus:ring-offset-2 focus:ring-[#fd00c5] transform transition-transform duration-300 hover:-translate-y-1">
+                    Add user
+                </button>
+            </div>
+
+            <div class="overflow-x-auto border border-gray-200 dark:border-gray-700 md:rounded-lg">
+                <div class="inline-block min-w-full align-middle overflow-x-auto">
+                    <div class="overflow-hidden">
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead class="bg-gray-50 dark:bg-gray-800">
                             <tr>
                                 <th scope="col"
-                                    class="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                    class="px-4 text-sm font-normal text-left rtl:text-right text-[#fd00c5] dark:text-gray-400">
                                     <div class="flex items-center gap-x-3">
                                         <svg class="h-3" viewBox="0 0 10 11" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
@@ -25,48 +33,48 @@
                                             <path d="M8.45558 7.25664V7.40664H8.60558H9.66065C9.72481 7.40664 9.74667 7.42274 9.75141 7.42691C9.75148 7.42808 9.75146 7.42993 9.75116 7.43262C9.75001 7.44265 9.74458 7.46304 9.72525 7.49314C9.72522 7.4932 9.72518 7.49326 9.72514 7.49332L7.86959 10.3529L7.86924 10.3534C7.83227 10.4109 7.79863 10.418 7.78568 10.418C7.77272 10.418 7.73908 10.4109 7.70211 10.3534L7.70177 10.3529L5.84621 7.49332C5.84617 7.49325 5.84612 7.49318 5.84608 7.49311C5.82677 7.46302 5.82135 7.44264 5.8202 7.43262C5.81989 7.42993 5.81987 7.42808 5.81994 7.42691C5.82469 7.42274 5.84655 7.40664 5.91071 7.40664H6.96578H7.11578V7.25664V0.633865C7.11578 0.42434 7.29014 0.249976 7.49967 0.249976H8.07169C8.28121 0.249976 8.45558 0.42434 8.45558 0.633865V7.25664Z"
                                                   fill="currentColor" stroke="currentColor" stroke-width="0.3"/>
                                         </svg>
-                                        Username
+                                        <strong>Username</strong>
                                     </div>
                                 </th>
 
                                 <th scope="col"
-                                    class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-[#fd00c5] dark:text-gray-400">
-                                    Email
+                                    class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right dark:text-gray-400">
+                                    <strong>Email</strong>
                                 </th>
 
                                 <th scope="col"
-                                    class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-[#fd00c5] dark:text-gray-400">
-                                    Firstname
+                                    class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right dark:text-gray-400">
+                                    <strong>Firstname</strong>
                                 </th>
 
                                 <th scope="col"
-                                    class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-[#fd00c5] dark:text-gray-400">
-                                    Lastname
+                                    class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right dark:text-gray-400">
+                                    <strong>Lastname</strong>
                                 </th>
 
                                 <th scope="col"
-                                    class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-[#fd00c5] dark:text-gray-400">
-                                    Phone Number
+                                    class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right dark:text-gray-400">
+                                    <strong>Phone</strong>
                                 </th>
 
                                 <th scope="col"
-                                    class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-[#fd00c5] dark:text-gray-400">
-                                    Status
+                                    class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right dark:text-gray-400">
+                                    <strong>Status</strong>
                                 </th>
 
                                 <th scope="col"
-                                    class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-[#fd00c5] dark:text-gray-400">
-                                    Account
+                                    class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right dark:text-gray-400">
+                                    <strong>Account</strong>
                                 </th>
 
                                 <th scope="col"
-                                    class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-[#fd00c5] dark:text-gray-400">
-                                    Roles
+                                    class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right dark:text-gray-400">
+                                    <strong>Roles</strong>
                                 </th>
 
                                 <th scope="col"
-                                    class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-[#fd00c5] dark:text-gray-400">
-                                    Location
+                                    class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right dark:text-gray-400">
+                                    <strong>Location</strong>
                                 </th>
 
                                 <th scope="col" class="relative py-3.5 px-4">
@@ -80,7 +88,7 @@
                             {% for user in users %}
                                 <tr>
                                     <td class="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                                        <div class="inline-flex items-center gap-x-3">
+                                        <div class="inline-flex items-center gap-x-3 text-[#fd00c5] underline">
                                             <a href="{{ path('user_details', {'id': user.id}) }}">{{ user.username }}</a>
                                         </div>
                                     </td>
@@ -93,7 +101,7 @@
                                     <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
                                         {% if user.isActive %}
                                             <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
-                                                <span aria-hidden
+                                                <span aria-hidden="true"
                                                       class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
                                                 <span class="relative text-xs">
                                                     active
@@ -101,7 +109,7 @@
                                             </span>
                                         {% else %}
                                             <span class="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
-                                                <span aria-hidden
+                                                <span aria-hidden="true"
                                                       class="absolute inset-0 bg-red-200 opacity-50 rounded-full"></span>
                                                 <span class="relative text-xs">
                                                     inactive
@@ -113,7 +121,7 @@
                                     <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
                                         {% if user.isVerified %}
                                             <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
-                                                <span aria-hidden
+                                                <span aria-hidden="true"
                                                       class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
                                                 <span class="relative text-xs">
                                                     verified
@@ -121,7 +129,7 @@
                                             </span>
                                         {% else %}
                                             <span class="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
-                                                <span aria-hidden
+                                                <span aria-hidden="true"
                                                       class="absolute inset-0 bg-red-200 opacity-50 rounded-full"></span>
                                                 <span class="relative text-xs">
                                                     unverified
@@ -144,16 +152,14 @@
                                     <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">{{ user.location.name }}</td>
 
                                     <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                        <div class="flex items-center gap-x-6">
-                                            <a href="{{ path('user_update', {'id': user.id}) }}">
-                                                <button class="px-5 py-2 border-[#fd00c5] border text-[#fd00c5] rounded transition duration-300 hover:text-[#fd00c5] focus:outline-none">
-                                                    View Details
-                                                </button>
+                                        <div class="flex gap-2 items-center w-full">
+                                            <a href="{{ path('user_update', {'id': user.id}) }}"
+                                               class="w-5 text-[#fd00c5]">
+                                                {{ ux_icon('heroicons:pencil-square') }}
                                             </a>
-                                            <a href="{{ path('user_delete', {'id': user.id}) }}">
-                                                <button class="px-5 py-2 border-[#fd00c5] border text-[#fd00c5] rounded transition duration-300 hover:text-[#fd00c5] focus:outline-none">
-                                                    Delete
-                                                </button>
+                                            <a href="{{ path('user_delete', {'id': user.id}) }}"
+                                               class="w-5 text-gray-500">
+                                                {{ ux_icon('heroicons:trash') }}
                                             </a>
                                         </div>
                                     </td>
