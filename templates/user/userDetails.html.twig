@@ -24,10 +24,14 @@
                     <div class="mt-12 flex flex-wrap justify-center">
                         <div class="relative w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
                             <div class="">
-                                <div class="max-w-56 shadow-xl rounded-full overflow-hidden align-middle border-none">
-                                    <img alt="profile picture"
-                                         src="https://demos.creative-tim.com/notus-js/assets/img/team-2-800x800.jpg"
-                                    >
+                                <div class="max-w-56 shadow-xl rounded-full overflow-hidden align-middle border-none aspect-square">
+                                    {% if user.profilImage %}
+                                        <img src="{{ asset('images/userImages/' ~ user.profilImage) }}" alt="profile picture of {{ user.username }}">
+                                    {% else %}
+                                        <div class="w-full w-56 h-56 flex justify-center items-center text-7xl bg-[#fd00c5] text-white">
+                                            <span>{{ user.firstName|first|upper }}{{ user.lastName|first|upper }}</span>
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
