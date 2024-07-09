@@ -31,6 +31,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $adminUser->setRoles($roles);
         $adminUser->setActive(true);
         $adminUser->setVerified(true);
+        $adminUser->setProfilImage($faker->image);
 
         $simpleUser = new User();
         $simpleUser->setUsername("fuckingUser");
@@ -43,6 +44,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $simpleUser->setRoles([$roles[0]]);
         $simpleUser->setActive(true);
         $simpleUser->setVerified(true);
+        $simpleUser->setProfilImage($faker->image);
 
         $users = [];
         for ($i = 0; $i < 300; $i++) {
@@ -57,6 +59,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $user->setRoles($faker->randomElements($roles));
             $user->setActive(true);
             $user->setVerified($faker->boolean(50));
+            $user->setProfilImage($faker->image);
 
             $manager->persist($user);
             $users[] = $user;
