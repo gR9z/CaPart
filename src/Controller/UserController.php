@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,24 +46,36 @@ class UserController extends AbstractController
         throw $this->createNotFoundException('User not found');
     }
 
-    #[Route('/user/{id}/update', name: 'user_update', methods: ['GET', 'POST'])]
-    public function updateUser(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    #[Route('/user/update/{id}', name: 'user_update', methods: ['GET', 'POST'])]
+    public function updateUser(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(RegistrationFormType::class, $user);
-        $form->handleRequest($request);
+        try {
+            $user = $entityManager->getRepository(User::class)->find($id);
+            if (!$user) {
+                throw new EntityNotFoundException('User not found');
+            }
 
-        if($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            $form = $this->createForm(RegistrationFormType::class, $user);
+            $form->handleRequest($request);
 
-            $this->addFlash('success', "User updated");
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager->flush();
+                $this->addFlash('success', "User updated");
 
+                return $this->redirectToRoute('user_list');
+            }
+
+            return $this->render('user/userUpdate.html.twig', [
+                'form' => $form->createView(),
+                'user' => $user,
+            ]);
+        } catch (EntityNotFoundException $e) {
+            $this->addFlash('error', 'User not found');
+            return $this->redirectToRoute('user_list');
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'An error occurred: ' . $e->getMessage());
             return $this->redirectToRoute('user_list');
         }
-
-        return $this->render('user/userUpdate.html.twig', [
-            'form' => $form->createView(),
-            'user' => $user,
-        ]);
     }
 
     #[Route('/user/delete/{id}', name: "user_delete", requirements: ['id' => '\d+'], methods: ['GET'])]
