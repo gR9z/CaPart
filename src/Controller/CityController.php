@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class CityController extends AbstractController
 {
@@ -47,6 +48,26 @@ class CityController extends AbstractController
         ]);
     }
 
+    #[Route('/cities/create', name: 'city_create', methods: ['GET', 'POST'])]
+    public function createCity(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $city = new City();
+        $form = $this->createForm(CityType::class, $city);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($city);
+            $entityManager->flush();
+
+            $this->addFlash('success', "City created successfully");
+
+            return $this->redirectToRoute('cities_list');
+        }
+
+        return $this->render('city/cityCreate.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 
     #[Route('cities/{id}/update', name: 'city_update', methods: ['GET', 'POST'])]
     public function updateCity(Request $request, City $city, EntityManagerInterface $entityManager): Response

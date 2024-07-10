@@ -48,6 +48,27 @@ class LocationController extends AbstractController
             'searchForm' => $searchForm->createView(),
         ]);
     }
+    
+    #[Route('/locations/create', name: 'location_create', methods: ['GET', 'POST'])]
+    public function createLocation(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $location = new Location();
+        $form = $this->createForm(LocationType::class, $location);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($location);
+            $entityManager->flush();
+
+            $this->addFlash('success', "Location created successfully");
+
+            return $this->redirectToRoute('locations_list');
+        }
+
+        return $this->render('location/locationCreate.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 
     #[Route('/locations/{id}/update', name: 'location_update', methods: ['GET', 'POST'])]
     public function updateLocation(Request $request, Location $location, EntityManagerInterface $entityManager): Response
