@@ -15,6 +15,16 @@
                 </a>
             </div>
 
+            <div class="mb-8">
+                {{ form_start(searchForm) }}
+                <div class="flex items-center gap-3">
+                    {{ form_row(searchForm.name) }}
+                    {{ form_row(searchForm.search) }}
+                    {{ form_widget(searchForm.clear, { 'attr': { 'class': 'btn btn-secondary' } }) }}
+                </div>
+                {{ form_end(searchForm) }}
+            </div>
+
             <div class="overflow-x-auto border border-gray-200 dark:border-gray-700 md:rounded-lg">
                 <div class="inline-block min-w-full align-middle overflow-x-auto">
                     <div class="overflow-hidden">

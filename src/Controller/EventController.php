@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\City;
 use App\Entity\Event;
 use App\Entity\Place;
+use App\Form\EventSearchType;
 use App\Form\EventType;
 use App\Repository\EventRepository;
 use App\Service\EventService;
@@ -34,11 +35,19 @@ class EventController extends AbstractController
         $this->eventService = $eventService;
     }
 
-    #[Route('/', name: 'list', methods: ['GET'])]
+    #[Route('/', name: 'list', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
-    public function list(EventRepository $eventRepository): Response
+    public function list(EventRepository $eventRepository, Request $request): Response
     {
-        $events = $eventRepository->findAll();
+        $searchForm = $this->createForm(EventSearchType::class);
+        $searchForm->handleRequest($request);
+
+        if($searchForm->isSubmitted() && $searchForm->isValid()) {
+            $criteria = $searchForm->getData();
+            $events = $eventRepository->findByCriteria($criteria);
+        } else {
+            $events = $eventRepository->findAll();
+        }
 
         foreach ($events as $event) {
             $this->eventService->updateEventState($event);
@@ -46,6 +55,7 @@ class EventController extends AbstractController
 
         return $this->render('event/list.html.twig', [
             'events' => $events,
+            'searchForm' => $searchForm->createView(),
         ]);
     }
 

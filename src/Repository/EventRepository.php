@@ -31,13 +31,29 @@ class EventRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Event
-    //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function findByCriteria(array $criteria): array
+    {
+        $qb = $this->createQueryBuilder('e');
+
+        if (!empty($criteria['name'])) {
+            $qb->andWhere('e.name LIKE :name')
+                ->setParameter('name', '%' . $criteria['name'] . '%');
+        }
+
+        if (!empty($criteria['startDate'])) {
+            $qb->andWhere('e.startDateTime >= :startDate')
+                ->setParameter('startDate', $criteria['startDate']->format('Y-m-d'));
+        }
+
+        if (!empty($criteria['endDate'])) {
+            $qb->andWhere('e.startDateTime <= :endDate')
+                ->setParameter('endDate', $criteria['endDate']->format('Y-m-d'));
+        }
+        if (!empty($criteria['location'])) {
+            $qb->andWhere('e.location = :location')
+                ->setParameter('location', $criteria['location']);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }
