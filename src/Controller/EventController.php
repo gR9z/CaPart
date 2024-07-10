@@ -40,6 +40,10 @@ class EventController extends AbstractController
     {
         $events = $eventRepository->findAll();
 
+        foreach ($events as $event) {
+            $this->eventService->updateEventState($event);
+        }
+
         return $this->render('event/list.html.twig', [
             'events' => $events,
         ]);
@@ -55,15 +59,12 @@ class EventController extends AbstractController
             throw $this->createNotFoundException('ID parameter is missing');
         }
 
-        $event = $eventRepository->find($id);;
-
+        $event = $eventRepository->find($id);
         if (!$event) {
             throw $this->createNotFoundException('Event not found: ' . $event);
         }
 
-        if (!$this->isGranted('ROLE_ADMIN') && $event !== $this->getUser()) {
-            throw new AccessDeniedException('Access denied.');
-        }
+        $this->eventService->updateEventState($event);
 
         return $this->render('event/details.html.twig', [
             'event' => $event,
@@ -127,6 +128,45 @@ class EventController extends AbstractController
         return $this->redirectToRoute('events_list');
     }
 
+    #[Route('/publish/{id}', name: 'publish', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
+    public function publish(EventRepository $eventRepository, int $id): Response {
+        $event = $eventRepository->find($id);
+
+        if (!$event) {
+            throw $this->createNotFoundException('Event not found: ' . $event);
+        }
+
+        $result = $this->eventService->publishEvent($event);
+
+        if ($result['success']) {
+            $this->addFlash('success', $result['message']);
+        } else {
+            $this->addFlash('error', $result['message']);
+        }
+
+        return $this->redirectToRoute('events_details', ['slug' => $this->slugger->slug(strtolower($event->getName())), 'id' => $event->getId()]);
+    }
+
+    #[Route('/cancel/{id}', name: 'cancel', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
+    public function cancel(EventRepository $eventRepository, int $id): Response {
+        $event = $eventRepository->find($id);
+
+        if (!$event) {
+            throw $this->createNotFoundException('Event not found: ' . $event);
+        }
+
+        $result = $this->eventService->cancelEvent($event);
+
+        if ($result['success']) {
+            $this->addFlash('success', $result['message']);
+        } else {
+            $this->addFlash('error', $result['message']);
+        }
+
+        return $this->redirectToRoute('events_details', ['slug' => $this->slugger->slug(strtolower($event->getName())), 'id' => $event->getId()]);
+    }
     #[Route('/register/{id}', name: 'register', requirements: ['id' => '\d+'], methods: ['GET'])]
     #[IsGranted('ROLE_USER')]
     public function register(int $id, EventRepository $eventRepository): Response
