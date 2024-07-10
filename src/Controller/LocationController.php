@@ -96,6 +96,8 @@ class LocationController extends AbstractController
         $location = $locationRepository->find($id);
         $entityManager->remove($location);
         $entityManager->flush();
+
+        $this->addFlash('success', 'Location deleted successfully');
         return $this->redirectToRoute('locations_list');
     }
 }

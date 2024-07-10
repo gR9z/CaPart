@@ -5,7 +5,17 @@ module.exports = {
     "./templates/**/*.html.twig",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'custom-pink': '#fd00c5',
+      },
+    },
+  },
+  variants: {
+    extend: {
+      ringColor: ['focus'],
+      borderColor: ['focus'],
+    },
   },
   plugins: [
     require('flowbite/plugin')
