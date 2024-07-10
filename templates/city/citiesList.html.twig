@@ -5,7 +5,6 @@
 {% block body %}
     <section>
         <div class="flex flex-col">
-
             <div class="flex flex-col gap-3 md:flex-row justify-between mb-8">
                 <h1 class="text-2xl font-bold text-center dark:text-gray-200">Cities list</h1>
                     <a href="{{ path('city_create') }}">
@@ -18,14 +17,23 @@
                     </a>
             </div>
 
+            <div class="mb-8">
+                {{ form_start(searchForm) }}
+                <div class="flex items-center gap-3">
+                    {{ form_row(searchForm.name) }}
+                    {{ form_row(searchForm.search) }}
+                    {{ form_widget(searchForm.clear, { 'attr': { 'class': 'btn btn-secondary' } }) }}
+                </div>
+                {{ form_end(searchForm) }}
+            </div>
+
             <div class="overflow-x-auto border border-gray-200 dark:border-gray-700 md:rounded-lg">
                 <div class="inline-block min-w-full align-middle overflow-x-auto">
                     <div class="overflow-hidden">
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead class="bg-gray-50 dark:bg-gray-800">
                             <tr>
-                                <th scope="col"
-                                    class="px-4 text-sm font-normal text-left rtl:text-right text-[#fd00c5] dark:text-gray-400">
+                                <th scope="col" class="px-4 text-sm font-normal text-left rtl:text-right text-[#fd00c5] dark:text-gray-400">
                                     <div class="flex items-center gap-x-3">
                                         <svg class="h-3" viewBox="0 0 10 11" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
@@ -47,9 +55,7 @@
                                 </th>
                             </tr>
                             </thead>
-
                             <tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-
                             {% for city in cities %}
                                 <tr>
                                     <td class="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
@@ -74,7 +80,6 @@
                                     </td>
                                 </tr>
                             {% endfor %}
-
                             </tbody>
                         </table>
                     </div>

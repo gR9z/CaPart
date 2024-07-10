@@ -64,6 +64,7 @@ class PlaceController extends AbstractController
         ]);
     }
 
+    #[Route('/places/delete/{id}', name: 'place_delete', methods: ['GET'])]
     public function deletePlace(PlaceRepository $placeRepository, EntityManagerInterface $entityManager, int $id): Response
     {
         $place = $placeRepository->find($id);

@@ -18,14 +18,23 @@
                 </a>
             </div>
 
+            <div class="mb-8">
+                {{ form_start(searchForm) }}
+                <div class="flex items-center gap-3">
+                    {{ form_row(searchForm.name, { 'attr': { 'class': 'form-control', 'placeholder': 'Search by location name' } }) }}
+                    {{ form_widget(searchForm.search, { 'attr': { 'class': 'btn btn-primary' } }) }}
+                    {{ form_widget(searchForm.clear, { 'attr': { 'class': 'btn btn-secondary', 'onclick': 'window.location.href = window.location.pathname' } }) }}
+                </div>
+                {{ form_end(searchForm) }}
+            </div>
+
             <div class="overflow-x-auto border border-gray-200 dark:border-gray-700 md:rounded-lg">
                 <div class="inline-block min-w-full align-middle overflow-x-auto">
                     <div class="overflow-hidden">
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead class="bg-gray-50 dark:bg-gray-800">
                             <tr>
-                                <th scope="col"
-                                    class="px-4 text-sm font-normal text-left rtl:text-right text-[#fd00c5] dark:text-gray-400">
+                                <th scope="col" class="px-4 text-sm font-normal text-left rtl:text-right text-[#fd00c5] dark:text-gray-400">
                                     <div class="flex items-center gap-x-3">
                                         <svg class="h-3" viewBox="0 0 10 11" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
@@ -46,7 +55,6 @@
                             </thead>
 
                             <tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-
                             {% for location in locations %}
                                 <tr>
                                     <td class="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
@@ -54,8 +62,6 @@
                                             <a href="{{ path('location_update', {'id': location.id}) }}">{{ location.name }}</a>
                                         </div>
                                     </td>
-
-                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">{{ location.name }}</td>
 
                                     <td class="px-4 py-4 text-sm whitespace-nowrap">
                                         <div class="flex gap-2 items-center w-full">
@@ -71,7 +77,6 @@
                                     </td>
                                 </tr>
                             {% endfor %}
-
                             </tbody>
                         </table>
                     </div>
