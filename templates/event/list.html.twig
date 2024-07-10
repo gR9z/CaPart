@@ -134,7 +134,8 @@
                                         {% set classes = stateClasses[event.state.label] ?? stateClasses['default'] %}
 
                                         <span class="relative inline-block px-3 py-1 font-semibold leading-tight {{ classes.text }}">
-                                            <span aria-hidden="true" class="absolute inset-0 {{ classes.bg }} opacity-50 rounded-full"></span>
+                                            <span aria-hidden="true"
+                                                  class="absolute inset-0 {{ classes.bg }} opacity-50 rounded-full"></span>
                                             <span class="relative text-xs">
                                                 {{ event.state.label }}
                                             </span>
@@ -172,8 +173,7 @@
                                     <td class="px-4 py-4 text-sm whitespace-nowrap">
                                         <div class="flex gap-2 items-center w-full">
                                             {% if app.user == event.organizer %}
-                                                {% if event.state.label == 'cancelled' %}
-                                                {% elseif event.state.label != 'created' %}
+                                                {% if event.state.label == 'cancelled' or event.state.label == 'created' or event.state.label == 'open' %}
                                                     <a href="{{ path('events_update', {'id': event.id}) }}"
                                                        class="w-5 text-[#fd00c5] group relative">
                                                         {{ ux_icon('heroicons:pencil-square') }}
@@ -181,28 +181,9 @@
                                                             <span class="bottom-full right-0 rounded bg-black px-2 py-1 text-xs text-white whitespace-nowrap">Update</span>
                                                         </div>
                                                     </a>
-                                                    <a href="{{ path('events_cancel', {'id': event.id}) }}"
-                                                       class="w-5 text-gray-500 group relative">
-                                                        {{ ux_icon('heroicons:x-mark') }}
-                                                        <div class="hidden group-hover:inline-block absolute bottom-[calc(100%+0.5rem)] left-[50%] -translate-x-[50%] group-hover:block w-auto">
-                                                            <span class="bottom-full right-0 rounded bg-black px-2 py-1 text-xs text-white whitespace-nowrap">Cancel</span>
-                                                        </div>
-                                                    </a>
-                                                {% else %}
-                                                    <a href="{{ path('events_update', {'id': event.id}) }}"
-                                                       class="w-5 text-[#fd00c5] group relative">
-                                                        {{ ux_icon('heroicons:pencil-square') }}
-                                                        <div class="hidden group-hover:inline-block absolute bottom-[calc(100%+0.5rem)] left-[50%] -translate-x-[50%] group-hover:block w-auto">
-                                                            <span class="bottom-full right-0 rounded bg-black px-2 py-1 text-xs text-white whitespace-nowrap">Update</span>
-                                                        </div>
-                                                    </a>
-                                                    <a href="{{ path('events_publish', {'id': event.id}) }}"
-                                                       class="w-5 text-indigo-500 group relative">
-                                                        {{ ux_icon('heroicons:cloud-arrow-up') }}
-                                                        <div class="hidden group-hover:inline-block absolute bottom-[calc(100%+0.5rem)] left-[50%] -translate-x-[50%] group-hover:block w-auto">
-                                                            <span class="bottom-full right-0 rounded bg-black px-2 py-1 text-xs text-white whitespace-nowrap">Publish</span>
-                                                        </div>
-                                                    </a>
+                                                {% endif %}
+
+                                                {% if event.state.label == 'created' or event.state.label == 'open' %}
                                                     <a href="{{ path('events_cancel', {'id': event.id}) }}"
                                                        class="w-5 text-gray-500 group relative">
                                                         {{ ux_icon('heroicons:x-mark') }}
@@ -211,6 +192,17 @@
                                                         </div>
                                                     </a>
                                                 {% endif %}
+
+                                                {% if event.state.label == 'created' %}
+                                                    <a href="{{ path('events_publish', {'id': event.id}) }}"
+                                                       class="w-5 text-indigo-500 group relative">
+                                                        {{ ux_icon('heroicons:cloud-arrow-up') }}
+                                                        <div class="hidden group-hover:inline-block absolute bottom-[calc(100%+0.5rem)] left-[50%] -translate-x-[50%] group-hover:block w-auto">
+                                                            <span class="bottom-full right-0 rounded bg-black px-2 py-1 text-xs text-white whitespace-nowrap">Publish</span>
+                                                        </div>
+                                                    </a>
+                                                {% endif %}
+
                                             {% else %}
                                                 {% if event.state.label == 'open' or event.state.label == 'ongoing' %}
                                                     {% if not event.isUserRegistered(app.user) and event.registrationDeadline > "now"|date('Y-m-d H:i') %}
