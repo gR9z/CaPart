@@ -14,10 +14,10 @@ class LocationSearchType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Location name',
+                'label' => false,
                 'required' => false,
                 'attr' => [
-                    'placeholder' => "Search by location name"
+                    'placeholder' => "Search by location"
                 ]
             ])
             ->add('search', SubmitType::class, [
