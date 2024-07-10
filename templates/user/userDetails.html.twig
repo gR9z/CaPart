@@ -28,8 +28,8 @@
                                     {% if user.profilImage %}
                                         <img src="{{ asset('images/userImages/' ~ user.profilImage) }}" alt="profile picture of {{ user.username }}">
                                     {% else %}
-                                        <div class="w-full w-56 h-56 flex justify-center items-center text-7xl bg-[#fd00c5] text-white">
-                                            <span>{{ user.firstName|first|upper }}{{ user.lastName|first|upper }}</span>
+                                        <div class="w-56 h-56 flex justify-center items-center text-7xl bg-[#fd00c5] text-white">
+                                            <span>{{ user.lastName|first|upper }}{{ user.firstName|first|upper }}</span>
                                         </div>
                                     {% endif %}
                                 </div>
