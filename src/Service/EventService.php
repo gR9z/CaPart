@@ -7,17 +7,22 @@ use App\Entity\State;
 use App\Entity\User;
 use App\Enum\StateLabel;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class EventService
 {
     private EntityManagerInterface $entityManager;
     private UserService $userService;
+    private SluggerInterface $slugger;
+    private Security $security;
 
-    public function __construct(EntityManagerInterface $entityManager, UserService $userService, SluggerInterface $slugger)
+    public function __construct(EntityManagerInterface $entityManager, UserService $userService, SluggerInterface $slugger, Security $security)
     {
         $this->entityManager = $entityManager;
         $this->userService = $userService;
+        $this->slugger = $slugger;
+        $this->security = $security;
     }
 
     public function createEvent(User $user, Event $event): array
@@ -48,6 +53,16 @@ class EventService
         ];
     }
 
+    public function deleteEvent(Event $event): array {
+        $this->entityManager->remove($event);
+        $this->entityManager->flush();
+
+        return [
+            'success' => true,
+            'message' => 'Event deleted successfully.'
+        ];
+    }
+
     public function updateEventState(Event $event): void
     {
         $currentDate = new \DateTime();
@@ -66,7 +81,7 @@ class EventService
     public function publishEvent(Event $event): array
     {
         $user = $this->userService->getAuthenticatedUser();
-        if ($user !== $event->getOrganizer()) {
+        if ($user !== $event->getOrganizer() && !$this->security->isGranted('ROLE_ADMIN')) {
             return [
                 'success' => false,
                 'event' => $event,
@@ -94,7 +109,7 @@ class EventService
     public function cancelEvent(Event $event): array
     {
         $user = $this->userService->getAuthenticatedUser();
-        if ($user !== $event->getOrganizer()) {
+        if ($user !== $event->getOrganizer() && !$this->security->isGranted('ROLE_ADMIN')) {
             return [
                 'success' => false,
                 'message' => 'You cannot cancel this event!'

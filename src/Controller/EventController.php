@@ -123,8 +123,19 @@ class EventController extends AbstractController
     {
         $event = $eventRepository->find($id);
 
-        $entityManager->remove($event);
-        $entityManager->flush();
+        if (!$event) {
+            $this->addFlash('error', 'Event not found.');
+            return $this->redirectToRoute('events_list');
+        }
+
+        $result = $this->eventService->deleteEvent($event);
+
+        if ($result['success']) {
+            $this->addFlash('success', $result['message']);
+        } else {
+            $this->addFlash('error', $result['message']);
+        }
+
         return $this->redirectToRoute('events_list');
     }
 
