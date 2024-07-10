@@ -44,7 +44,7 @@ class EventController extends AbstractController
 
         if($searchForm->isSubmitted() && $searchForm->isValid()) {
             $criteria = $searchForm->getData();
-            $events = $eventRepository->findByName($criteria['name']);
+            $events = $eventRepository->findByCriteria($criteria);
         } else {
             $events = $eventRepository->findAll();
         }
