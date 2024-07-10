@@ -152,6 +152,33 @@
                                 </div>
                                 <div>{{ event.duration | format_duration }}</div>
                             </div>
+
+                            {% if is_granted('ROLE_ADMIN') %}
+                            <div class="flex gap-2 items-center w-full justify-center mt-8">
+                                    <a href="{{ path('events_update', {'id': event.id}) }}"
+                                       class="flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#fd00c5] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        Update
+                                    </a>
+
+                                    {% if event.state.label == 'open' %}
+                                        <a href="{{ path('events_cancel', {'id': event.id}) }}"
+                                           class="flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-gray-800 bg-gray-200 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                            Cancel
+                                        </a>
+
+                                    {% elseif event.state.label == 'cancelled' %}
+                                        <a href="{{ path('events_publish', {'id': event.id}) }}"
+                                           class="flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-blue-800 bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                            Publish
+                                        </a>
+                                    {% endif %}
+
+                                    <a href="{{ path('events_delete', {'id': event.id}) }}"
+                                       class="flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-red-800 bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        Delete
+                                    </a>
+                            </div>
+                            {% endif %}
                         </div>
 
                         <div class="mt-10 py-10 border-t border-blueGray-200 text-center">

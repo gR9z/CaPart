@@ -28,32 +28,30 @@ class EventType extends AbstractType
 
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Event Name',
-                'attr' => ['class' => 'form-control']
+                'label' => 'Event Name'
             ])
             ->add('startDateTime', DateTimeType::class, [
                 'label' => 'Start date',
+                'data' => new \DateTime(),
                 'widget' => 'single_text',
                 'html5' => true,
-                'attr' => ['class' => 'form-control']
+                'attr' => ['min' => (new \DateTime())->format('Y-m-d\TH:i')]
             ])
             ->add('registrationDeadline', DateType::class, [
                 'label' => 'Registration deadline',
+                'data' => new \DateTime(),
                 'widget' => 'single_text',
                 'html5' => true,
-                'attr' => ['class' => 'form-control']
+                'attr' => ['min' => (new \DateTime())->format('Y-m-d')]
             ])
             ->add('maxRegistrations', IntegerType::class, [
-                'label' => 'Maximum registrations',
-                'attr' => ['class' => 'form-control']
+                'label' => 'Maximum registrations'
             ])
             ->add('duration', IntegerType::class, [
-                'label' => 'Duration (in minutes)',
-                'attr' => ['class' => 'form-control']
+                'label' => 'Duration (in minutes)'
             ])
             ->add('eventDetails', TextareaType::class, [
-                'label' => 'Event details',
-                'attr' => ['class' => 'form-control']
+                'label' => 'Event details'
             ])
             ->add('location', EntityType::class, [
                 'class' => Location::class,
@@ -71,16 +69,14 @@ class EventType extends AbstractType
                 'class' => City::class,
                 'choice_label' => 'name',
                 'label' => 'City',
-                'placeholder' => '-- choice your city --',
-                'attr' => ['class' => 'form-control']
+                'placeholder' => '-- choice your city --'
             ])
             ->add('place', EntityType::class, [
                 'class' => Place::class,
                 'choice_label' => 'name',
                 'label' => 'Place',
                 'placeholder' => '-- select a place --',
-                'choices' => [],
-                'attr' => ['class' => 'form-control']
+                'choices' => []
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Submit'
