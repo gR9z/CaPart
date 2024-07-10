@@ -16,21 +16,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class CityController extends AbstractController
 {
     #[Route('/cities', name:'cities_list', methods: ['GET', 'POST'])]
-    public function citiesList(CityRepository $cityRepository, EntityManagerInterface $entityManager, Request $request): Response
+    public function citiesList(CityRepository $cityRepository, Request $request): Response
     {
-        $city = new City();
-        $form = $this->createForm(CityType::class, $city);
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($city);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'City created successfully');
-
-            return $this->redirectToRoute('cities_list');
-        }
-
         $searchForm = $this->createForm(CitySearchType::class);
         $searchForm->handleRequest($request);
 
@@ -43,7 +30,6 @@ class CityController extends AbstractController
 
         return $this->render('city/citiesList.html.twig', [
             'cities' => $cities,
-            'form' => $form->createView(),
             'searchForm' => $searchForm->createView(),
         ]);
     }
