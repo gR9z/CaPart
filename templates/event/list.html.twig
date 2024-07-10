@@ -90,63 +90,45 @@
                                     </td>
 
                                     <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                        {% if event.state.label == 'created' %}
-                                            <span class="relative inline-block px-3 py-1 font-semibold text-blue-900 leading-tight">
-                                                <span aria-hidden="true"
-                                                      class="absolute inset-0 bg-blue-200 opacity-50 rounded-full"></span>
-                                                <span class="relative text-xs">
-                                                    {{ event.state.label }}
-                                                </span>
+                                        {% set stateClasses = {
+                                            'created': {
+                                                'text': 'text-blue-900',
+                                                'bg': 'bg-blue-200'
+                                            },
+                                            'open': {
+                                                'text': 'text-green-900',
+                                                'bg': 'bg-green-200'
+                                            },
+                                            'closed': {
+                                                'text': 'text-red-900',
+                                                'bg': 'bg-red-200'
+                                            },
+                                            'ongoing': {
+                                                'text': 'text-orange-900',
+                                                'bg': 'bg-orange-200'
+                                            },
+                                            'past': {
+                                                'text': 'text-red-900',
+                                                'bg': 'bg-red-200'
+                                            },
+                                            'cancelled': {
+                                                'text': 'text-gray-900',
+                                                'bg': 'bg-gray-200'
+                                            },
+                                            'default': {
+                                                'text': 'text-purple-900',
+                                                'bg': 'bg-purple-200'
+                                            }
+                                        } %}
+
+                                        {% set classes = stateClasses[event.state.label] ?? stateClasses['default'] %}
+
+                                        <span class="relative inline-block px-3 py-1 font-semibold leading-tight {{ classes.text }}">
+                                            <span aria-hidden="true" class="absolute inset-0 {{ classes.bg }} opacity-50 rounded-full"></span>
+                                            <span class="relative text-xs">
+                                                {{ event.state.label }}
                                             </span>
-                                        {% elseif event.state.label == 'open' %}
-                                            <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
-                                                <span aria-hidden="true"
-                                                      class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
-                                                <span class="relative text-xs">
-                                                    {{ event.state.label }}
-                                                </span>
-                                            </span>
-                                        {% elseif event.state.label == 'closed' %}
-                                            <span class="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
-                                                <span aria-hidden="true"
-                                                      class="absolute inset-0 bg-red-200 opacity-50 rounded-full"></span>
-                                                <span class="relative text-xs">
-                                                    {{ event.state.label }}
-                                                </span>
-                                            </span>
-                                        {% elseif event.state.label == 'ongoing' %}
-                                            <span class="relative inline-block px-3 py-1 font-semibold text-orange-900 leading-tight">
-                                                <span aria-hidden="true"
-                                                      class="absolute inset-0 bg-orange-200 opacity-50 rounded-full"></span>
-                                                <span class="relative text-xs">
-                                                    {{ event.state.label }}
-                                                </span>
-                                            </span>
-                                        {% elseif event.state.label == 'past' %}
-                                            <span class="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
-                                                <span aria-hidden="true"
-                                                      class="absolute inset-0 bg-red-200 opacity-50 rounded-full"></span>
-                                                <span class="relative text-xs">
-                                                    {{ event.state.label }}
-                                                </span>
-                                            </span>
-                                        {% elseif event.state.label == 'cancelled' %}
-                                            <span class="relative inline-block px-3 py-1 font-semibold text-gray-900 leading-tight">
-                                                <span aria-hidden="true"
-                                                      class="absolute inset-0 bg-gray-200 opacity-50 rounded-full"></span>
-                                                <span class="relative text-xs">
-                                                    {{ event.state.label }}
-                                                </span>
-                                            </span>
-                                        {% else %}
-                                            <span class="relative inline-block px-3 py-1 font-semibold text-purple-900 leading-tight">
-                                                <span aria-hidden="true"
-                                                      class="absolute inset-0 bg-purple-200 opacity-50 rounded-full"></span>
-                                                <span class="relative text-xs">
-                                                    {{ event.state.label }}
-                                                </span>
-                                            </span>
-                                        {% endif %}
+                                        </span>
                                     </td>
 
                                     <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
@@ -180,7 +162,8 @@
                                     <td class="px-4 py-4 text-sm whitespace-nowrap">
                                         <div class="flex gap-2 items-center w-full">
                                             {% if app.user == event.organizer %}
-                                                {% if event.state.label != 'created' %}
+                                                {% if event.state.label == 'cancelled' %}
+                                                {% elseif event.state.label != 'created' %}
                                                     <a href="{{ path('events_update', {'id': event.id}) }}"
                                                        class="w-5 text-[#fd00c5] group relative">
                                                         {{ ux_icon('heroicons:pencil-square') }}
@@ -203,11 +186,18 @@
                                                             <span class="bottom-full right-0 rounded bg-black px-2 py-1 text-xs text-white whitespace-nowrap">Update</span>
                                                         </div>
                                                     </a>
-                                                    <a href="{{ path('events_update', {'id': event.id}) }}"
-                                                       class="w-5 text-indigo-500  group relative">
+                                                    <a href="{{ path('events_publish', {'id': event.id}) }}"
+                                                       class="w-5 text-indigo-500 group relative">
                                                         {{ ux_icon('heroicons:cloud-arrow-up') }}
                                                         <div class="hidden group-hover:inline-block absolute bottom-[calc(100%+0.5rem)] left-[50%] -translate-x-[50%] group-hover:block w-auto">
                                                             <span class="bottom-full right-0 rounded bg-black px-2 py-1 text-xs text-white whitespace-nowrap">Publish</span>
+                                                        </div>
+                                                    </a>
+                                                    <a href="{{ path('events_cancel', {'id': event.id}) }}"
+                                                       class="w-5 text-gray-500 group relative">
+                                                        {{ ux_icon('heroicons:x-mark') }}
+                                                        <div class="hidden group-hover:inline-block absolute bottom-[calc(100%+0.5rem)] left-[50%] -translate-x-[50%] group-hover:block w-auto">
+                                                            <span class="bottom-full right-0 rounded bg-black px-2 py-1 text-xs text-white whitespace-nowrap">Cancel</span>
                                                         </div>
                                                     </a>
                                                 {% endif %}
@@ -234,6 +224,7 @@
                                             {% endif %}
                                         </div>
                                     </td>
+
                                 </tr>
                             {% endfor %}
 

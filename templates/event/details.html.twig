@@ -3,26 +3,228 @@
 {% block title %}Event details{% endblock %}
 
 {% block body %}
-    <h1>Event details</h1>
 
-    <table class="table">
-        <tr>
-            <th>Name</th>
-            <td>{{ event.name }}</td>
-        </tr>
-        <tr>
-            <th>Start date</th>
-            <td>{{ event.startDateTime|date('Y-m-d H:i') }}</td>
-        </tr>
-        <tr>
-            <th>Duration</th>
-            <td>{{ event.duration }}</td>
-        </tr>
-        <tr>
-            <th>Details</th>
-            <td>{{ event.eventDetails }}</td>
-        </tr>
-    </table>
+    <section class="relative block h-96 overflow-hidden rounded-lg">
+        <div class="absolute top-0 w-full h-full bg-center bg-cover" style="
+            background-image: url('/images/bg-event-details.jpg');
+          ">
+        </div>
+        <div class="top-auto bottom-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden h-70-px"
+             style="transform: translateZ(0px)">
+            <svg class="absolute bottom-0 overflow-hidden" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
+                 version="1.1" viewBox="0 0 2560 100" x="0" y="0">
+                <polygon class="text-blueGray-200 fill-current" points="2560 0 2560 100 0 100"></polygon>
+            </svg>
+        </div>
+    </section>
 
-    <a href="{{ path('events_list') }}" class="btn btn-secondary">Back to list</a>
+    <section class="mx-auto relative py-16 bg-blueGray-200">
+        <div class="px-4">
+            <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64">
+                <div class="px-6">
+                    <div class="mt-12 flex flex-col flex-wrap justify-center">
+
+                        <div class="text-center mt-12">
+                            {% set stateClasses = {
+                                'created': {
+                                    'text': 'text-blue-900',
+                                    'bg': 'bg-blue-200'
+                                },
+                                'open': {
+                                    'text': 'text-green-900',
+                                    'bg': 'bg-green-200'
+                                },
+                                'closed': {
+                                    'text': 'text-red-900',
+                                    'bg': 'bg-red-200'
+                                },
+                                'ongoing': {
+                                    'text': 'text-orange-900',
+                                    'bg': 'bg-orange-200'
+                                },
+                                'past': {
+                                    'text': 'text-red-900',
+                                    'bg': 'bg-red-200'
+                                },
+                                'cancelled': {
+                                    'text': 'text-gray-900',
+                                    'bg': 'bg-gray-200'
+                                },
+                                'default': {
+                                    'text': 'text-purple-900',
+                                    'bg': 'bg-purple-200'
+                                }
+                            } %}
+
+                            {% set classes = stateClasses[event.state.label] ?? stateClasses['default'] %}
+
+                            <span class="relative inline-block px-3 py-1 font-semibold leading-tight {{ classes.text }}">
+                                <span aria-hidden="true"
+                                      class="absolute inset-0 {{ classes.bg }} opacity-50 rounded-full"></span>
+                                <span class="relative text-xs">
+                                    {{ event.state.label }}
+                                </span>
+                            </span>
+
+                            {% if (event.state.label == "ongoing" or event.state.label == "open") and event.maxRegistrations == event.participants.count %}
+                                <span class="relative inline-block px-3 py-1 font-semibold leading-tight text-red-900">
+                                <span aria-hidden="true"
+                                      class="absolute inset-0 bg-red-200 opacity-50 rounded-full"></span>
+                                <span class="relative text-xs">
+                                    full
+                                </span>
+                            </span>
+                            {% endif %}
+
+                            <div class="leading-normal mt-5 text-blueGray-400 flex gap-2 justify-center items-center">
+                                <div class="w-5">
+                                    {{ ux_icon('heroicons:calendar-days') }}
+                                </div>
+                                <div>
+                                    Start at <strong>{{ event.startDateTime | date('F j, Y H:i') }}</strong>
+                                </div>
+                            </div>
+
+                            <h1 class="text-4xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2">
+                                <strong>{{ event.name }}</strong>
+                            </h1>
+
+                            <p class="w-full lg:w-9/12 mx-auto mt-3 text-xl">
+                                {% if app.user == event.organizer %}
+                                    ❗ You are the organizer of this event ❗
+                                {% else %}
+                                    Organized by {{ event.organizer.lastName }} {{ event.organizer.firstName }} ({{ event.location.name }})
+                                {% endif %}
+                            </p>
+
+                            <div class="w-full lg:w-9/12 px-4 flex gap-3 justify-center mx-auto my-5">
+                                {% if app.user == event.organizer %}
+                                    {% if event.state.label == 'cancelled' %}
+                                      <div class="flex flex-col items-center gap-3">
+                                          <p>This event has been cancelled, please create a new one</p>
+                                          <a href="{{ path('events_create') }}"
+                                             class="flex justify-center py-2 px-4 border border-transparent rounded-md
+                shadow-sm text-sm font-medium text-white bg-[#fd00c5] hover:bg-[#fd00c5] focus:outline-none
+                focus:ring-2 focus:ring-offset-2 focus:ring-[#fd00c5] transform transition-transform duration-300 hover:-translate-y-1">
+                                              Create New Event
+                                          </a>
+                                      </div>
+                                    {% elseif event.state.label != 'created' %}
+                                        <a href="{{ path('events_update', {'id': event.id}) }}"
+                                           class="flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#fd00c5] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                            Update
+                                        </a>
+                                        <a href="{{ path('events_cancel', {'id': event.id}) }}"
+                                           class="flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-gray-800 bg-gray-200 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                            Cancel
+                                        </a>
+                                    {% else %}
+                                        <a href="{{ path('events_update', {'id': event.id}) }}"
+                                           class="flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#fd00c5] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                            Update
+                                        </a>
+                                        <a href="{{ path('events_publish', {'id': event.id}) }}"
+                                           class="flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-blue-800 bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                            Publish
+                                        </a>
+                                    {% endif %}
+
+                                {% else %}
+                                    {% if event.state.label == 'open' or event.state.label == 'ongoing' %}
+                                        {% if not event.isUserRegistered(app.user) and event.registrationDeadline > "now"|date('Y-m-d H:i') %}
+                                            <a href="{{ path('events_register', {'id': event.id}) }}"
+                                               class="flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-orange-800 bg-orange-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                Register
+                                            </a>
+                                        {% elseif event.isUserRegistered(app.user) %}
+                                            <a href="{{ path('events_unregister', {'id': event.id}) }}"
+                                               class="flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-gray-800 bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                Unregister
+                                            </a>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-2 text-blueGray-600 mt-5 flex gap-2 justify-center items-center">
+                                <div class="w-5">
+                                    {{ ux_icon('heroicons:clock') }}
+                                </div>
+                                <div>{{ event.duration | format_duration }}</div>
+                            </div>
+                        </div>
+
+                        <div class="mt-10 py-10 border-t border-blueGray-200 text-center">
+                            <div class="w-full lg:w-9/12 px-4 mx-auto mb-8 text-lg leading-relaxed text-blueGray-700">
+                                <div class="leading-normal text-blueGray-400 flex gap-2 justify-center items-center">
+                                    <div class="w-5">
+                                        {{ ux_icon('heroicons:user') }}
+                                    </div>
+                                    <p>
+                                        Availability: <strong>{{ event.participants.count }}
+                                            /{{ event.maxRegistrations }}</strong>
+                                    </p>
+                                </div>
+
+                                <div class="leading-normal mt-2 text-blueGray-400 flex gap-2 justify-center items-center">
+                                    <div class="w-5">
+                                        {{ ux_icon('heroicons:calendar-days') }}
+                                    </div>
+                                    <p>
+                                        End of registration at
+                                        <strong>{{ event.registrationDeadline | date('F j, Y') }}</strong>
+                                    </p>
+                                </div>
+
+                                <div class="leading-normal mt-2 text-blueGray-400 ">
+                                    <div class="leading-normal mt-2 mb-2 text-blueGray-400 flex gap-2 justify-center items-center">
+                                        <div class="w-5">
+                                            {{ ux_icon('heroicons:globe-europe-africa') }}
+                                        </div>
+                                        <p>
+                                            City: <strong>{{ event.place.city.name }}</strong>
+                                        </p>
+                                    </div>
+                                    <p>Place: <strong>{{ event.place.name }}</strong></p>
+                                    <p>Address: <strong>{{ event.place.street }}</strong></p>
+                                    <p>Latitude: <strong>{{ event.place.latitude }}</strong></p>
+                                    <p>Longitude: <strong>{{ event.place.longitude }}</strong></p>
+
+                                </div>
+
+                                <p class="mt-8">
+                                    {{ event.eventDetails }}
+                                </p>
+                            </div>
+
+                            <a href="{{ path('events_list') }}" class="underline text-[#fd00c5]">Back to event list</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {#    <h1>Event details</h1> #}
+
+    {#    <table class="table"> #}
+    {#        <tr> #}
+    {#            <th>Name</th> #}
+    {#            <td>{{ event.name }}</td> #}
+    {#        </tr> #}
+    {#        <tr> #}
+    {#            <th>Start date</th> #}
+    {#            <td>{{ event.startDateTime|date('Y-m-d H:i') }}</td> #}
+    {#        </tr> #}
+    {#        <tr> #}
+    {#            <th>Duration</th> #}
+    {#            <td>{{ event.duration }}</td> #}
+    {#        </tr> #}
+    {#        <tr> #}
+    {#            <th>Details</th> #}
+    {#            <td>{{ event.eventDetails }}</td> #}
+    {#        </tr> #}
+    {#    </table> #}
+
+    {#    <a href="{{ path('events_list') }}" class="btn btn-secondary">Back to list</a> #}
 {% endblock %}

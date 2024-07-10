@@ -48,6 +48,76 @@ class EventService
         ];
     }
 
+    public function updateEventState(Event $event): void
+    {
+        $currentDate = new \DateTime();
+
+        static $statePast = null;
+        if ($statePast === null) {
+            $statePast = $this->entityManager->getRepository(State::class)->findOneBy(['label' => StateLabel::Past->value]);
+        }
+
+        if ($statePast !== null && $event->getStartDateTime() < $currentDate && $event->getState()->getLabel() !== StateLabel::Past->value) {
+            $event->setState($statePast);
+            $this->entityManager->flush();
+        }
+    }
+
+    public function publishEvent(Event $event): array
+    {
+        $user = $this->userService->getAuthenticatedUser();
+        if ($user !== $event->getOrganizer()) {
+            return [
+                'success' => false,
+                'event' => $event,
+                'message' => 'You cannot publish this event!'
+            ];
+        }
+
+        $stateOpen = $this->entityManager->getRepository(State::class)->findOneBy(['label' => StateLabel::Open->value]);
+        if ($stateOpen === null) {
+            return [
+                'success' => false,
+                'message' => 'The state "open" was not found in the database.'
+            ];
+        }
+
+        $event->setState($stateOpen);
+        $this->entityManager->flush();
+
+        return [
+            'success' => true,
+            'message' => 'Event published!'
+        ];
+    }
+
+    public function cancelEvent(Event $event): array
+    {
+        $user = $this->userService->getAuthenticatedUser();
+        if ($user !== $event->getOrganizer()) {
+            return [
+                'success' => false,
+                'message' => 'You cannot cancel this event!'
+            ];
+        }
+
+        $stateCancelled = $this->entityManager->getRepository(State::class)->findOneBy(['label' => StateLabel::Cancelled->value]);
+        if ($stateCancelled === null) {
+            return [
+                'success' => false,
+                'message' => 'The state "cancelled" was not found in the database.'
+            ];
+        }
+
+        $event->setState($stateCancelled);
+        $this->entityManager->flush();
+
+        return [
+            'success' => true,
+            'message' => 'Event cancelled!'
+        ];
+    }
+
     public function registerUserToEvent(Event $event): array
     {
         $user = $this->userService->getAuthenticatedUser();
@@ -132,7 +202,7 @@ class EventService
 
     private function checkIfEventIsOpenOrOngoing(Event $event): array
     {
-        if ($event->getState()->getLabel() !== 'open' && $event->getState()->getLabel() !== 'ongoing' ) {
+        if ($event->getState()->getLabel() !== 'open' && $event->getState()->getLabel() !== 'ongoing') {
             return [
                 'success' => false,
                 'message' => 'The event is not open for registration'
