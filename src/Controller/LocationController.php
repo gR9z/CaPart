@@ -17,34 +17,25 @@ class LocationController extends AbstractController
     #[Route('/locations', name: 'locations_list', methods: ['GET', 'POST'])]
     public function locationsList(LocationRepository $locationRepository, EntityManagerInterface $entityManager, Request $request): Response
     {
-        $locations = $locationRepository->findAll();
-
-        $location = new Location();
-        $form = $this->createForm(LocationType::class, $location);
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($location);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Location created successfully');
-
-            return $this->redirectToRoute('locations_list');
-        }
 
         $searchForm = $this->createForm(LocationSearchType::class);
         $searchForm->handleRequest($request);
 
-        if($searchForm-> isSubmitted() && $searchForm->isValid()) {
-            $criteria = $searchForm->getData();
-            $locations = $locationRepository->findByName($criteria['name']);
-        } else {
-            $locations = $locationRepository->findAll();
+        try {
+            if($searchForm-> isSubmitted() && $searchForm->isValid()) {
+                $criteria = $searchForm->getData();
+                $locations = $locationRepository->findByName($criteria['name']);
+            } else {
+                $locations = $locationRepository->findAll();
+            }
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'An error occurred: ' . $e->getMessage());
+            $locations = [];
         }
+
 
         return $this->render('location/locationsList.html.twig', [
             'locations' => $locations,
-            'form' => $form->createView(),
             'searchForm' => $searchForm->createView(),
         ]);
     }
@@ -56,13 +47,17 @@ class LocationController extends AbstractController
         $form = $this->createForm(LocationType::class, $location);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($location);
-            $entityManager->flush();
+        try {
+            if($form->isSubmitted() && $form->isValid()) {
+                $entityManager->persist($location);
+                $entityManager->flush();
 
-            $this->addFlash('success', "Location created successfully");
+                $this->addFlash('success', "Location created successfully");
 
-            return $this->redirectToRoute('locations_list');
+                return $this->redirectToRoute('locations_list');
+            }
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'An error occurred: ' . $e->getMessage());
         }
 
         return $this->render('location/locationCreate.html.twig', [
@@ -76,12 +71,16 @@ class LocationController extends AbstractController
         $form = $this->createForm(LocationType::class, $location);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+        try {
+            if($form->isSubmitted() && $form->isValid()) {
+                $entityManager->flush();
 
-            $this->addFlash('success', 'Location updated');
+                $this->addFlash('success', 'Location updated');
 
-            return $this->redirectToRoute('locations_list');
+                return $this->redirectToRoute('locations_list');
+            }
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'An error occurred: ' . $e->getMessage());
         }
 
         return $this->render('location/locationUpdate.html.twig', [
@@ -93,11 +92,21 @@ class LocationController extends AbstractController
     #[Route('/locations/delete/{id}', name: 'location_delete', methods: ['GET'])]
     public function deleteLocation(LocationRepository $locationRepository, EntityManagerInterface $entityManager, int $id): Response
     {
-        $location = $locationRepository->find($id);
-        $entityManager->remove($location);
-        $entityManager->flush();
+        try {
+            $location = $locationRepository->find($id);
 
-        $this->addFlash('success', 'Location deleted successfully');
+            if(!$location) {
+                throw new \Exception('Location not found');
+            }
+
+            $entityManager->remove($location);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Location deleted successfully');
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'An error occurred: ' . $e->getMessage());
+        }
+
         return $this->redirectToRoute('locations_list');
     }
 }

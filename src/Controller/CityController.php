@@ -20,11 +20,16 @@ class CityController extends AbstractController
         $searchForm = $this->createForm(CitySearchType::class);
         $searchForm->handleRequest($request);
 
-        if($searchForm-> isSubmitted() && $searchForm->isValid()) {
-            $criteria = $searchForm->getData();
-            $cities = $cityRepository->findByName($criteria['name']);
-        } else {
-            $cities = $cityRepository->findAll();
+        try {
+            if($searchForm->isSubmitted() && $searchForm->isValid()) {
+                $criteria = $searchForm->getData();
+                $cities = $cityRepository->findByName($criteria['name']);
+            } else {
+                $cities = $cityRepository->findAll();
+            }
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'An error occured ' . $e->getMessage());
+            $cities = [];
         }
 
         return $this->render('city/citiesList.html.twig', [
@@ -40,13 +45,17 @@ class CityController extends AbstractController
         $form = $this->createForm(CityType::class, $city);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($city);
-            $entityManager->flush();
+        try {
+            if($form->isSubmitted() && $form->isValid()) {
+                $entityManager->persist($city);
+                $entityManager->flush();
 
-            $this->addFlash('success', "City created successfully");
+                $this->addFlash('success', "City created successfully");
 
-            return $this->redirectToRoute('cities_list');
+                return $this->redirectToRoute('cities_list');
+            }
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'An error occured ' . $e->getMessage());
         }
 
         return $this->render('city/cityCreate.html.twig', [
@@ -60,12 +69,16 @@ class CityController extends AbstractController
         $form = $this->createForm(CityType::class, $city);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+        try {
+            if($form->isSubmitted() && $form->isValid()) {
+                $entityManager->flush();
 
-            $this->addFlash('success', 'City updated');
+                $this->addFlash('success', 'City updated');
 
-            return $this->redirectToRoute('cities_list');
+                return $this->redirectToRoute('cities_list');
+            }
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'An error occurred: ' . $e->getMessage());
         }
 
         return $this->render('city/cityUpdate.html.twig', [
@@ -77,9 +90,21 @@ class CityController extends AbstractController
     #[Route('/cities/delete/{id}', name: "city_delete", requirements: ['id' => '\d+'], methods: ['GET'])]
     public function deleteCity(CityRepository $cityRepository, EntityManagerInterface $entityManager, int $id): Response
     {
-        $city = $cityRepository->find($id);
-        $entityManager->remove($city);
-        $entityManager->flush();
+        try {
+            $city = $cityRepository->find($id);
+
+            if(!$city) {
+                throw new \Exception('City not found');
+            }
+
+            $entityManager->remove($city);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'City deleted successfully');
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'An error occurred: ' . $e->getMessage());
+        }
+
         return $this->redirectToRoute("cities_list");
     }
 

@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Form\UserSearchType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
@@ -16,13 +17,27 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UserController extends AbstractController
 {
-    #[Route('/user', name: 'user_list', methods: ['GET'])]
-    public function list(UserRepository $userRepository): Response
+    #[Route('/user', name: 'user_list', methods: ['GET', 'POST'])]
+    public function list(UserRepository $userRepository, Request $request): Response
     {
-        $users = $userRepository->findAll();
+        $searchForm = $this->createForm(UserSearchType::class);
+        $searchForm->handleRequest($request);
+
+        try {
+            if($searchForm->isSubmitted() && $searchForm->isValid()) {
+                $criteria = $searchForm->getData();
+                $users = $userRepository->findByLastName($criteria['lastName']);
+            } else {
+                $users = $userRepository->findAll();
+            };
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'An error occurred: ' . $e->getMessage());
+            $users = [];
+        }
 
         return $this->render('user/usersList.html.twig', [
             'users' => $users,
+            'searchForm' => $searchForm->createView(),
         ]);
     }
 
@@ -81,9 +96,22 @@ class UserController extends AbstractController
     #[Route('/user/delete/{id}', name: "user_delete", requirements: ['id' => '\d+'], methods: ['GET'])]
     public function deleteUser(UserRepository $userRepository, EntityManagerInterface $entityManager, int $id): Response
     {
-        $user = $userRepository->find($id);
-        $entityManager->remove($user);
-        $entityManager->flush();
+        try {
+            $user = $userRepository->find($id);
+
+            if(!$user) {
+                throw new \Exception('User not found');
+            }
+
+            $entityManager->remove($user);
+            $entityManager->flush();
+            $this->addFlash('success', 'User deleted successfully');
+
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'An error occurred: ' . $e->getMessage());
+
+        }
+
         return $this->redirectToRoute("user_list");
     }
 
