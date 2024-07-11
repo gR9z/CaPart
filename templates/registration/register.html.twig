@@ -85,7 +85,7 @@
                 </div>
                 <div class="mb-4">
                     {{ form_label(registrationForm.image, 'Image', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'}}) }}
-                    {{ form_widget(registrationForm.image, {'attr': {'class': 'shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
+                    {{ form_widget(registrationForm.image, {'attr': {'class': 'shadow-sm rounded-md w-full px-3 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
                     {% if registrationForm.image.vars.errors|length > 0 %}
                         <div class="text-red-500 text-sm mt-2">
                             {{ form_errors(registrationForm.image) }}
