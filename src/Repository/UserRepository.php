@@ -48,13 +48,15 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?User
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function findByLastName(?string $lastName): array
+    {
+        $qb = $this->createQueryBuilder('n');
+
+        if ($lastName) {
+            $qb->andWhere('n.lastName LIKE :lastName')
+                ->setParameter('lastName', '%' . $lastName . '%');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }
