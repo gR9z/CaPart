@@ -48,7 +48,7 @@ class EventSearchType extends AbstractType
                 'label' => 'Location',
             ])
             ->add('filters', ChoiceType::class, [
-                'label' => 'Filters',
+                'label' => false,
                 'multiple' => true,
                 'expanded' => true,
                 'choices' => [
