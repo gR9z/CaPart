@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Event;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -31,29 +32,68 @@ class EventRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    public function findByCriteria(array $criteria): array
+    public function findByCriteria(array $criteria, ?User $user): array
     {
         $qb = $this->createQueryBuilder('e');
 
+        $conditions = $qb->expr()->andX();
+
         if (!empty($criteria['name'])) {
-            $qb->andWhere('e.name LIKE :name')
-                ->setParameter('name', '%' . $criteria['name'] . '%');
+            $conditions->add($qb->expr()->like('e.name', ':name'));
+            $qb->setParameter('name', '%' . $criteria['name'] . '%');
         }
 
         if (!empty($criteria['startDate'])) {
-            $qb->andWhere('e.startDateTime >= :startDate')
-                ->setParameter('startDate', $criteria['startDate']->format('Y-m-d'));
+            $conditions->add($qb->expr()->gte('e.startDateTime', ':startDate'));
+            $qb->setParameter('startDate', $criteria['startDate']->format('Y-m-d'));
         }
 
         if (!empty($criteria['endDate'])) {
-            $qb->andWhere('e.startDateTime <= :endDate')
-                ->setParameter('endDate', $criteria['endDate']->format('Y-m-d'));
+            $conditions->add($qb->expr()->lte('e.startDateTime', ':endDate'));
+            $qb->setParameter('endDate', $criteria['endDate']->format('Y-m-d'));
         }
+
         if (!empty($criteria['location'])) {
-            $qb->andWhere('e.location = :location')
-                ->setParameter('location', $criteria['location']);
+            $conditions->add($qb->expr()->eq('e.location', ':location'));
+            $qb->setParameter('location', $criteria['location']);
         }
+
+        if (!empty($criteria['filters'])) {
+            foreach ($criteria['filters'] as $filter) {
+                switch ($filter) {
+                    case 'pastEvents':
+                        $conditions->add($qb->expr()->lt('e.startDateTime', ':now'));
+                        $qb->setParameter('now', new \DateTime());
+                        break;
+                    case 'myEvents':
+                        if ($user) {
+                            $conditions->add($qb->expr()->isMemberOf(':user', 'e.participants'));
+                            $qb->setParameter('user', $user);
+                        }
+                        break;
+                    case 'notMyEvents':
+                        if ($user) {
+                            $subQb = $this->createQueryBuilder('sub')
+                                ->select('sub.id')
+                                ->innerJoin('sub.participants', 'sp')
+                                ->andWhere('sp.id = :userId');
+                            $conditions->add($qb->expr()->notIn('e.id', $subQb->getDQL()));
+                            $qb->setParameter('userId', $user->getId());
+                        }
+                        break;
+                    case 'organizedEvents':
+                        if ($user) {
+                            $conditions->add($qb->expr()->eq('e.organizer', ':organizerId'));
+                            $qb->setParameter('organizerId', $user->getId());
+                        }
+                        break;
+                }
+            }
+        }
+
+        $qb->andWhere($conditions);
 
         return $qb->getQuery()->getResult();
     }
+
 }
