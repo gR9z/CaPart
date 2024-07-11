@@ -5,10 +5,10 @@
 {% block body %}
     <section>
         <div class="flex flex-col">
-            <div class="flex flex-col gap-3 md:flex-row justify-between mb-8">
+            <div class="flex flex-col gap-3 md:flex-row justify-between items-center mb-8">
                 <h1 class="text-2xl font-bold text-center dark:text-gray-200">Cities list</h1>
 
-                <div class="mb-8">
+                <div>
                     {{ form_start(searchForm) }}
                     <div class="flex items-center gap-3">
                         {{ form_row(searchForm.name, { 'attr': { 'class': 'shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-custom-pink focus:border-custom-pink'} }) }}
