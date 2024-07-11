@@ -6,6 +6,8 @@ use App\Entity\Location;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -45,6 +47,18 @@ class EventSearchType extends AbstractType
                 'placeholder' => 'Choose a location',
                 'required' => false,
                 'label' => 'Location',
+            ])
+            ->add('filters', ChoiceType::class, [
+                'label' => 'Filters',
+                'multiple' => true,
+                'expanded' => true,
+                'choices' => [
+                    'Events I\'m organizing' => 'organizedEvents',
+                    'Events I\'m registered to' => 'myEvents',
+                    'Events I\'m not registered to' => 'notMyEvents',
+                    'Show past events' => 'pastEvents',
+                   ],
+                'required' => false,
             ])
             ->add('search', SubmitType::class, [
                 'label' => 'Search',
