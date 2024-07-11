@@ -11,9 +11,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class UserController extends AbstractController
 {
@@ -62,7 +64,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/update/{id}', name: 'user_update', methods: ['GET', 'POST'])]
-    public function updateUser(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    public function updateUser(int $id, Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         try {
             $user = $entityManager->getRepository(User::class)->find($id);
@@ -74,6 +76,35 @@ class UserController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
+
+                $profilePictureFile = $form->get('image')->getData();
+
+                if ($profilePictureFile) {
+                    $originalFilename = pathinfo($profilePictureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeFilename = $slugger->slug($originalFilename);
+                    $newFilename = $safeFilename . '-' . uniqid() . '.' . $profilePictureFile->guessExtension();
+
+                    try {
+                        $profilePictureFile->move(
+                            $this->getParameter('image_directory'),
+                            $newFilename
+                        );
+                    } catch (FileException $e) {
+                        $this->addFlash('error', 'Erreur lors du téléchargement de la photo de profil.');
+                        return $this->redirectToRoute('user_update', ['id' => $user->getId()]);
+                    }
+
+                    if ($user->getProfilImage()) {
+                        $oldFilename = $user->getProfilImage();
+                            $oldFilePath = $this->getParameter('image_directory') . '/' . $oldFilename;
+                            if (file_exists($oldFilePath)) {
+                                unlink($oldFilePath);
+
+                        }
+                    }
+                    $user->setProfilImage($newFilename);
+                }
+
                 $entityManager->flush();
                 $this->addFlash('success', "User updated");
 
