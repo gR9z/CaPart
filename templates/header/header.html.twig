@@ -9,42 +9,42 @@
             <ul class="hidden md:flex items-center space-x-2 ">
                 {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
                     <li onclick="selected()"
-                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-white bg-[#fd00c5]  cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
-                        <a href="{{ path('app_login') }}">Login</a>
+                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-black cursor-pointer font-normal text-xs leading-3 shadow-md rounded">
+                        <a class="block px-3 py-2.5" href="{{ path('app_login') }}">Login</a>
                     </li>
                     <li onclick="selected()"
-                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border bg-[#fd00c5] border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
-                        <a href="{{ path('app_register') }}">Sign Up</a>
+                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-black border border-white bg-gray-50 cursor-pointer font-normal text-xs leading-3 shadow-md rounded">
+                        <a class="block px-3 py-2.5" href="{{ path('app_register') }}">Sign Up</a>
                     </li>
                 {% endif %}
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     <li onclick="selected()"
-                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
-                        <a href="{{ path('events_list') }}">Events</a>
+                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-black border border-white cursor-pointer font-normal text-xs leading-3 shadow-md rounded">
+                        <a class="block px-3 py-2.5" href="{{ path('events_list') }}">Events</a>
                     </li>
                     <li onclick="selected()"
-                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
-                        <a href="{{ path('user_details', {'id': app.user.id} ) }}">My Account</a>
+                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-black border border-white  cursor-pointer font-normal text-xs leading-3 shadow-md rounded">
+                        <a class="block px-3 py-2.5" href="{{ path('user_details', {'id': app.user.id} ) }}">My Account</a>
                     </li>
                 {% endif %}
                 {% if is_granted('ROLE_ADMIN') %}
                     <li onclick="selected()"
-                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
-                        <a href="{{ path('user_list') }}">Users</a>
+                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-black border border-white  cursor-pointer font-normal text-xs leading-3 shadow-md rounded">
+                        <a class="block px-3 py-2.5" href="{{ path('user_list') }}">Users</a>
                     </li>
                     <li onclick="selected()"
-                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
-                        <a href="{{ path('cities_list') }}">Cities</a>
+                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-black border border-white  cursor-pointer font-normal text-xs leading-3 shadow-md rounded">
+                        <a class="block px-3 py-2.5" href="{{ path('cities_list') }}">Cities</a>
                     </li>
                     <li onclick="selected()"
-                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
-                        <a href="{{ path('locations_list') }}">Locations</a>
+                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-black border border-white  cursor-pointer font-normal text-xs leading-3 shadow-md rounded">
+                        <a class="block px-3 py-2.5" href="{{ path('locations_list') }}">Locations</a>
                     </li>
                 {% endif %}
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     <li onclick="selected()"
-                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded">
-                        <a href="{{ path('app_logout') }}">Logout</a>
+                        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-black border border-white  cursor-pointer font-normal text-xs leading-3 shadow-md rounded">
+                        <a class="block px-3 py-2.5" href="{{ path('app_logout') }}">Logout</a>
                     </li>
                 {% endif %}
             </ul>
@@ -122,7 +122,7 @@
 
         for (let i = 0; i < child.length; i++) {
             if (child[i].classList.contains("text-white")) {
-                child[i].classList.remove("text-white", "bg-indigo-600");
+                child[i].classList.remove("text-white");
                 child[i].classList.add(
                     "text-gray-600",
                     "bg-gray-50",
@@ -138,7 +138,7 @@
             "border",
             "border-white"
         );
-        targeted.classList.add("text-white", "bg-indigo-600");
+        targeted.classList.add("pink-color",);
     }
 
     function selectNew() {
